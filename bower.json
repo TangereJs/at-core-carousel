@@ -1,0 +1,9 @@
+{
+  "name": "at-core-carousel",
+  "version": "1.0.0.0",
+  "private": true,
+  "dependencies": {
+    "polymer": "Polymer/polymer#master",
+    "at-theme": "TangereJs/at-theme#0.8-preview"
+  }
+}
