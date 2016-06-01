@@ -6,11 +6,27 @@
     <script src="../webcomponentsjs/webcomponents.js" charset="utf-8"></script>
     <link rel="import" href="../polymer/polymer.html">
     <link rel="import" href="demo-list.html">
+    <link rel="import" href="demo-declarative.html">
   </head>
   <body>
-    <demo-list></demo-list>
+    <div>
+      <div>
+        <h4>Items here are generated programmatically and are bound</h4>
+      </div>
+      <div>
+        <demo-list></demo-list>
+      </div>
+    </div>
+    <div>
+      <div>
+        <h4>Items here are defined declaratively and are not bound</h4>
+      </div>
+      <div>
+        <demo-declarative></demo-declarative>
+      </div>
+    </div>
     <script>
-      
+
     </script>
   </body>
 </html>

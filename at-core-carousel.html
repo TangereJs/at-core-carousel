@@ -4,6 +4,7 @@
 
 <dom-module id="at-core-carousel">
   <template>
+    <style include="at-form-common"></style>
     <style>
       .swipe {
         overflow: hidden;
@@ -18,18 +19,52 @@
 
       .swipe-wrap > div {
         float: left;
-        width: 300px;
+        width: 100%;
         position: relative;
         overflow: hidden;
       }
+
+      .listItem {
+        border: 2px dotted black;
+      }
+
+      /*
+       * styles for horizontal scrollable single row carousel when cards have fixed width
+       */
+      .hide-scrollbar-in-chrome ::-webkit-scrollbar {
+        display: none;
+      }
+
+      .carousel {
+        display: block;
+        overflow-x: auto;
+        position: relative;
+        white-space: nowrap;
+        transform: translate3d(0,0,0);
+      }
+
+      .carousel-wrap {
+        display: inline-block;
+      }
+
+      .carousel-item {
+        display: inline-block;
+        width: 300px;
+        white-space: normal;
+      }
+
     </style>
     <at-core-spinner id="spinner" type="wave"></at-core-spinner>
     <at-carbon-message id="msgEmptyList" type="info"></at-carbon-message>
     <div id="insertContainer" class="swipe">
       <div id="insertPoint" class="swipe-wrap">
-
       </div>
     </div>
+
+    <div id="staticItems" class="hidden">
+      <content select="*"></content>
+    </div>
+
   </template>
   <script>
     'use strict';
@@ -52,11 +87,16 @@
           value: 320,
           notify: true
         },
-        layout: {
+        mode: {
           type: String,
-          value: "card",
-          notify: true
+          value: "static",
+          xvaluelist: ['static', 'bound']
         },
+        // layout: {
+        //   type: String,
+        //   value: "card",
+        //   notify: true
+        // },
         indicator: {
           type: Boolean,
           value: false,
@@ -90,61 +130,108 @@
         this.$.msgEmptyList.html = ""; // clear error message
 
         // remove all items
-        var listWrapper = Polymer.dom(this.root).querySelector("#listWrapper");
-        if (listWrapper) {
-          while (listWrapper.hasChildNodes()) {
-            listWrapper.removeChild(listWrapper.lastChild);
-          }
+        var insertPoint = Polymer.dom(this.$.insertPoint);
+        while(insertPoint.firstChild) {
+          insertPoint.removeChild(insertPoint.firstChild);
         }
         Polymer.dom.flush();
       },
 
-      layoutList: function() {
-
-        var layout = this.layout == "grid" ? "grid" : "card";
-
-        // get the container width
-        //var wrapper = this.shadowRoot.getElementById("listWrapper");
-        var wrapper = Polymer.dom(this.root).querySelector("#listWrapper");
-        if (!wrapper) return; // component not yet ready
-
-        var cw = wrapper.offsetWidth;
-
-        // retry if offsetWidth == 0 to give time to paint
-        if (cw == 0) {
-          this.async(function() {
-            this.layoutList();
-          }, 100);
-          return;
-        }
-
-        // number of columns 1...5
-        var cols = Math.floor(cw / this.cardWidth);
-        if (cols < 1) cols = 1;
-        if (cols > 5) cols = 5;
-
-        //console.log("cols " + cols + " cw " + cw + " " + this.cardWidth);
-
-        var newClass = layout + " cols-" + cols;
-        if (wrapper.className != newClass) {
-          wrapper.className = newClass;
-        }
-
-        return cw;
-      },
+      // layoutList: function() {
+      //   return;
+      //   var layout = this.layout == "grid" ? "grid" : "card";
+      //
+      //   // get the container width
+      //   //var wrapper = this.shadowRoot.getElementById("listWrapper");
+      //   var wrapper = Polymer.dom(this.root).querySelector("#listWrapper");
+      //   if (!wrapper) return; // component not yet ready
+      //
+      //   var cw = wrapper.offsetWidth;
+      //
+      //   // retry if offsetWidth == 0 to give time to paint
+      //   if (cw == 0) {
+      //     this.async(function() {
+      //       this.layoutList();
+      //     }, 100);
+      //     return;
+      //   }
+      //
+      //   // number of columns 1...5
+      //   var cols = Math.floor(cw / this.cardWidth);
+      //   if (cols < 1) cols = 1;
+      //   if (cols > 5) cols = 5;
+      //
+      //   //console.log("cols " + cols + " cw " + cw + " " + this.cardWidth);
+      //
+      //   var newClass = layout + " cols-" + cols;
+      //   if (wrapper.className != newClass) {
+      //     wrapper.className = newClass;
+      //   }
+      //
+      //   return cw;
+      // },
 
       initialize: function() {
 
         var mel = this.$.msgEmptyList;
         mel.html = "";
 
+        // remove css classes from insertContainer and insertPoint
+        var insertContainer = Polymer.dom(this.$.insertContainer);
+        insertContainer.classList.remove('swipe');
+        insertContainer.classList.remove('carousel');
+        var insertPoint = Polymer.dom(this.$.insertPoint);
+        insertPoint.classList.remove('swipe-wrap');
+        insertPoint.classList.remove('carousel-wrap');
+
+        // its up to martin to decide what is the relationship between mode
+        // and isFixed width
+        // mode basically tells what is the data source static/bound; also both sources can be combined although that is a non trivial problem
+        // cardWidth in essence determines the rendering mode
+        var mode = this.mode;
+        if (mode === "bound") {
+          // add swipe classes to the insertContainer and insertPoint
+          insertContainer.classList.add('swipe');
+          insertPoint.classList.add('swipe-wrap');
+
+          this._initializeBoundDataSource();
+        } else if (mode === "static") {
+          // add carousel classes to the insertContainer and insertPoint
+          insertContainer.classList.add('carousel');
+          insertPoint.classList.add('carousel-wrap');
+
+          this._initializeStaticDataSource();
+        } else {
+          // invalid mode specified
+          // TODO: localize
+          Polymer.dom(mel).innerHTML = "Mode " + mode + " is invalid.";
+        }
+
+        var isFixedWidth = this._isNumber(this.cardWidth);
+
+        if (isFixedWidth) {
+          // render mode is carousel
+        } else {
+          // render mode is swipe
+        }
+
         // show error if items is an empty array
         if (this.items.constructor == Array && this.items.length == 0) {
           mel.html = this.emptyList;
         }
 
-        if (!this.items || (!this.template && !this.itemComponent)) {
-          return;
+        if (this.mode === "static") {
+          // initialize swipe instace from light children
+          //append list container to shadow dom
+          // var listWrapper = this.$.insertContainer;
+          // var swipeInstance = new Swipe(listWrapper, {
+          //   draggable: true,
+          //   useFixedWidth: this._isNumber(this.cardWidth)
+          // });
+        } else if (this.mode === "bound") {
+          if (!this.items || (!this.template && !this.itemComponent)) {
+            return;
+          }
         }
 
         if (!!this.itemComponent) {
@@ -161,7 +248,7 @@
           var importPath = compName.indexOf("/") >= 0 ? compUrl + compName + ".html" : compName + ".html";
 
           this.importHref(importPath, function() {
-            this.bindItems();
+            this._initializeBoundDataSource();
           }, function() {
             Polymer.signal("busy-end");
             alert(window.location.href + "\n\nERROR: failed to load list item " + this.itemComponent);
@@ -172,11 +259,11 @@
 
         } else {
           // with inline template binding can happen immediately
-          this.bindItems();
+          this._initializeBoundDataSource();
         }
       },
 
-      bindItems: function() {
+      _initializeBoundDataSource: function() {
 
         if (!this.items || (!this.template && !this.itemComponent)) {
           return;
@@ -200,18 +287,6 @@
         }
 
         Polymer.dom.flush();
-
-        // calculate layout columns
-        if (0 == this.layoutList()) {
-
-          // 0 == parent width not yet availble, retry
-          this.async(function() {
-            this.layoutList();
-          });
-        }
-
-        // create list container
-        var fragment = document.createDocumentFragment();
 
         var comp = this.itemComponent;
         if (comp.indexOf("/") > 0) {
@@ -257,54 +332,86 @@
 
         this.indicator = false; // hide indicator before list is rendered
 
+        Polymer.dom.flush();
+
         //append list container to shadow dom
         Polymer.dom(listWrapper).appendChild(listContainer);
-
-        var swipeInstance = new Swipe(listWrapper, {
-          draggable: true
+        if (this.swipeInstance) {
+          this.swipeInstance.kill();
+        }
+        var swipeInstance = this.swipeInstance = new Swipe(listWrapper, {
+          draggable: true,
+          useFixedWidth: this._isNumber(this.cardWidth)
         });
 
         this.fire("list-ready");
       },
 
+      _initializeStaticDataSource: function () {
+        var staticItems = Polymer.dom(this.$.staticItems);
+        var insertPoint = Polymer.dom(this.$.insertPoint);
+
+        var children = staticItems.getEffectiveChildNodes();
+        var child;
+        for (var i = 0; i < children.length; i++) {
+          child = children[i];
+          child.parentElement.removeChild(child);
+          if (child.nodeType !== 3) {
+            child.classList.add('carousel-item');
+            insertPoint.appendChild(child);
+          }
+        }
+
+        Polymer.dom.flush();
+      },
+
+      _isNumber: function (obj) {
+        return Object.prototype.toString.call(obj) === "[object Number]";
+      },
+
       ready: function() {
         // update layout after windows resize
-        window.addEventListener('resize', function() {
-
-          this.layoutList();
-
-          // 2nd layout after side drawer animation is finished
-          setTimeout(function() {
-            this.layoutList();
-          }.bind(this), 500);
-
-        }.bind(this), true);
-
-        // update layout after orientation change
-        window.addEventListener('orientationchange', function() {
-          this.async(function() {
-            this.layoutList();
-          });
-
-          // 2nd try to ensure that even slow android devices show the correct result
-          setTimeout(function() {
-            this.layoutList();
-          }.bind(this), 1000);
-        }.bind(this), false);
-
-        // show/hide drawer changes also the available width
-        window.addEventListener('core-responsive-change', function() {
-
-          this.async(function() {
-            this.layoutList();
-          });
-
-          // 2nd layout after side drawer animation is finished
-          setTimeout(function() {
-            this.layoutList();
-          }.bind(this), 500);
-
-        }.bind(this), false);
+        // window.addEventListener('resize', function() {
+        //
+        //   this.layoutList();
+        //
+        //   // 2nd layout after side drawer animation is finished
+        //   setTimeout(function() {
+        //     this.layoutList();
+        //   }.bind(this), 500);
+        //
+        // }.bind(this), true);
+        //
+        // // update layout after orientation change
+        // window.addEventListener('orientationchange', function() {
+        //   this.async(function() {
+        //     this.layoutList();
+        //   });
+        //
+        //   // 2nd try to ensure that even slow android devices show the correct result
+        //   setTimeout(function() {
+        //     this.layoutList();
+        //   }.bind(this), 1000);
+        // }.bind(this), false);
+        //
+        // // show/hide drawer changes also the available width
+        // window.addEventListener('core-responsive-change', function() {
+        //
+        //   this.async(function() {
+        //     this.layoutList();
+        //   });
+        //
+        //   // 2nd layout after side drawer animation is finished
+        //   setTimeout(function() {
+        //     this.layoutList();
+        //   }.bind(this), 500);
+        //
+        // }.bind(this), false);
+        //
+        // var self = this;
+        // self.async(function(){
+        //   self.initialize();
+        // });
       }
     });
   </script>
