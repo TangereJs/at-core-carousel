@@ -1,0 +1,202 @@
+<link rel="import" href="at-core-carousel.html">
+
+<dom-module id="demo-bound">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      .row {
+        margin: 0 12px;
+        padding: 4px 0;
+      }
+
+      .fixed-width-container {
+        width: 500px;
+        background-color: bisque;
+        margin: 0 24px;
+      }
+
+      .fluid-width-container {
+        width: 100%;
+        background-color: bisque;
+        margin: 0 24px;
+      }
+
+      .description {
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .code-container {
+        margin: 0 12px;
+      }
+    </style>
+
+    <div class="row">
+      <h2>Demos where data is provided programmatically and rendered using a specified component</h2>
+      <h4>
+        Component used for rendering is at-core-carousel/demo-item.html
+      </h4>
+    </div>
+
+    <div class="row">
+      <h3>Demo 1</h3>
+      <div class="description">
+        <ul>
+          <li>Carousel is inside fixed width container (500px).</li>
+          <li>Carousel has mode=bound.</li>
+          <li>Carousel has card-width="". This sets renderMode to swipe and each swipe item has 100% width of carousel</li>
+        </ul>
+      </div>
+      <div>
+        <h3>HTML</h3>
+        <div class="code-container">
+          <code>&lt;at-core-carousel mode=&quot;bound&quot; items=&quot;data&quot; item-component=&quot;demo-item&quot; card-width=&quot;&quot;&gt;&lt;/at-core-carousel&gt;</code>
+        </div>
+      </div>
+      <div>
+        <h3>Preview</h3>
+        <div class="fixed-width-container">
+          <at-core-carousel mode="bound" items="{{data}}" item-component="demo-item" card-width=""></at-core-carousel>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <h3>Demo 2</h3>
+      <div class="description">
+        <ul>
+          <li>Carousel is inside fluid width container (100%).</li>
+          <li>Carousel has mode=bound.</li>
+          <li>Carousel has card-width="100%". This sets renderMode to swipe and each swipe item has 100% width of carousel</li>
+        </ul>
+      </div>
+      <div>
+        <h3>HTML</h3>
+        <div class="code-container">
+          <code>&lt;at-core-carousel mode=&quot;bound&quot; items=&quot;data&quot; item-component=&quot;demo-item&quot; card-width=&quot;100%&quot;&gt;&lt;/at-core-carousel&gt;</code>
+        </div>
+      </div>
+      <div>
+        <h3>Preview</h3>
+        <div class="fluid-width-container">
+          <at-core-carousel mode="bound" items="{{data}}" item-component="demo-item" card-width="100%"></at-core-carousel>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <h3>Demo 3</h3>
+      <div class="description">
+        <ul>
+          <li>Carousel is inside fixed width container (500px).</li>
+          <li>Carousel has mode=bound.</li>
+          <li>Carousel has card-width="450". This sets renderMode to carousel and each carousel item has a fixed width of 450px</li>
+        </ul>
+      </div>
+      <div>
+        <h3>HTML</h3>
+        <div class="code-container">
+          <code>&lt;at-core-carousel mode=&quot;bound&quot; items=&quot;data&quot; item-component=&quot;demo-item&quot; card-width=&quot;450&quot;&gt;&lt;/at-core-carousel&gt;</code>
+        </div>
+      </div>
+      <div>
+        <h3>Preview</h3>
+        <div class="fixed-width-container">
+          <at-core-carousel mode="bound" items="{{data}}" item-component="demo-item" card-width="450"></at-core-carousel>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <h3>Demo 4</h3>
+      <div class="description">
+        <ul>
+          <li>Carousel is inside fluid width container (100%).</li>
+          <li>Carousel has mode=bound.</li>
+          <li>Carousel has card-width="450". This sets renderMode to carousel and each carousel item has a fixed width of 450px</li>
+        </ul>
+      </div>
+      <div>
+        <h3>HTML</h3>
+        <div class="code-container">
+          <code>&lt;at-core-carousel mode=&quot;bound&quot; items=&quot;data&quot; item-component=&quot;demo-item&quot; card-width=&quot;450&quot;&gt;&lt;/at-core-carousel&gt;</code>
+        </div>
+      </div>
+      <div>
+        <h3>Preview</h3>
+        <div class="fluid-width-container">
+          <at-core-carousel mode="bound" items="{{data}}" item-component="demo-item" card-width="450"></at-core-carousel>
+        </div>
+      </div>
+    </div>
+
+  </template>
+</dom-module>
+
+<script>
+  (function () {
+    var strings = [
+          "PARKOUR!",
+          "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit. Lorem est qui dolorem ipsum quia. ",
+          "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+        ];
+
+    var namegen = {
+      generateString: function (inLength) {
+        var s = '';
+        for (var i = 0; i < inLength; i++) {
+          s += String.fromCharCode(Math.floor(Math.random() * 26) + 97);
+        }
+        return s;
+      },
+      generateName: function (inMin, inMax) {
+        return this.generateString(Math.floor(Math.random() * (inMax - inMin + 1) + inMin));
+      }
+    };
+
+    Polymer({
+      is: 'demo-bound',
+      count: 100,
+      ready: function () {
+        this.data = this.generateData();
+      },
+      properties: {
+        data: { type: Object }
+      },
+      generateData: function () {
+        var names = [],
+          data = [];
+        for (var i = 0; i < this.count; i++) {
+          names.push(namegen.generateName(4, 8));
+        }
+        names.sort();
+        for (var i = 0; i < this.count; i++) {
+          var name = names[i];
+          var divider = name.charAt(0);
+          if (divider === (names[i - 1] || '').charAt(0)) {
+            divider = null;
+          }
+          var age = new Date();
+          age.setMinutes(age.getMinutes() - i + 10);
+
+          //  <img class="ui avatar image" src="images/{{ index | modulo:4 }}.png">
+
+          data.push({
+            index: i,
+            description: name,
+            divider: divider,
+            title: strings[i % 3],
+            date: age.toISOString()
+          });
+        }
+        return data;
+      },
+      tapAction: function (e) {
+        console.log('tap', e);
+      }
+    });
+  })();
+</script>
