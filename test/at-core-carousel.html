@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+
+<head>
+
+  <title>at-core-carousel tests</title>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/test-helpers.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+
+  <link rel="import" href="../at-core-carousel.html">
+</head>
+
+<body>
+
+  <test-fixture id="basic">
+    <template>
+      <at-core-carousel></at-core-carousel>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('basic', function() {
+
+      test('basic', function(done) {
+        var carousel = fixture('basic');
+
+        var age = new Date();
+        var data = [{
+          index: 0,
+          description: "desc1",
+          divider: "d",
+          title: 'Title 1',
+          date: age.toISOString()
+        }, {
+          index: 1,
+          description: "desc2",
+          divider: "d",
+          title: 'Title 2',
+          date: age.toISOString()
+        }, {
+          index: 2,
+          description: "desc3",
+          divider: "d",
+          title: 'Title 3',
+          date: age.toISOString()
+        }];
+
+        carousel.items = data;
+        carousel.itemComponent = "demo-item";
+
+        flush(function () {
+          var insertPoint = carousel.$.insertPoint;
+          var demoItems = Polymer.dom(insertPoint).querySelectorAll('demo-item');
+          var demoItemsCount = demoItems.length;
+          assert.equal(demoItemsCount, 3, 'All items are not processed');
+          done();
+        });
+
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>

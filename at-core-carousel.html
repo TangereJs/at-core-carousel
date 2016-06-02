@@ -336,7 +336,7 @@
         var cardWidthPropValue = this.cardWidth;
 
         var result;
-        if (cardWidthAttrValue.indexOf('%') !== -1 && isNaN(cardWidthPropValue)) {
+        if (cardWidthAttrValue && cardWidthAttrValue.indexOf('%') !== -1 && isNaN(cardWidthPropValue)) {
           result = "swipe";
         } else if (cardWidthAttrValue === "" && cardWidthPropValue === 0) {
           result = "swipe";
