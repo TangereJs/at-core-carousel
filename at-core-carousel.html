@@ -97,7 +97,7 @@
           type: String,
           value: "static",
           xtype: "enum",
-          xvaluelist: "static,bound"          
+          xvaluelist: "static,bound"
         },
         indicator: {
           type: Boolean,
@@ -242,7 +242,7 @@
         // get correct renderElementName
         var renderElementName = this.itemComponent;
         if (renderElementName.indexOf("/") > 0) {
-          renderElementName = renderElementName.substring(1 + renderElementName.indexOf("/"));
+          renderElementName = renderElementName.substring(1 + renderElementName.lastIndexOf("/"));
         }
 
         // create swipe item prototype for cloning

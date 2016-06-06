@@ -15,6 +15,7 @@
   <script src="../../iron-test-helpers/test-helpers.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
 
+  <link rel="import" href="../demo-item.html">
   <link rel="import" href="../at-core-carousel.html">
 </head>
 
@@ -29,7 +30,8 @@
   <script>
     suite('basic', function() {
 
-      test('basic', function(done) {
+      // this test tests whether carousel items are created and inserted into shady/Shadow dom correctly
+      test('creation and insertion into shady shadow dom', function(done) {
         var carousel = fixture('basic');
 
         var age = new Date();
@@ -53,17 +55,55 @@
           date: age.toISOString()
         }];
 
+        carousel.mode = 'bound';
         carousel.items = data;
-        carousel.itemComponent = "demo-item";
+        carousel.itemComponent = "../at-core-carousel/demo-item";
 
-        flush(function () {
-          var insertPoint = carousel.$.insertPoint;
-          var demoItems = Polymer.dom(insertPoint).querySelectorAll('demo-item');
-          var demoItemsCount = demoItems.length;
-          assert.equal(demoItemsCount, 3, 'All items are not processed');
-          done();
+        // carousel needs to be attached to another element in the DOM so that attached event will fire
+        // carousel is initialized on attached event because only then are correct dimensions available
+        var tmpDiv = document.createElement('div');
+        Polymer.dom(tmpDiv).appendChild(carousel);
+
+        // we want to query insert point to find out what is there
+        // now calling flush should be enough for this, as WCT docs say flush waits for all DOM mutations to take place
+        // but in this case that is not enough
+        // so I call setTimeout here to provide for more time for changes to take place
+        // it turns out that simply calling setTimeout is enough
+        // also using just setTimeout doens't work
+        flush(function() {
+          setTimeout(function () {
+            var insertPoint = carousel.$.insertPoint;
+            var demoItems = Polymer.dom(insertPoint).querySelectorAll('demo-item');
+            var demoItemsCount = demoItems.length;
+            assert.equal(demoItemsCount, 3, 'All items are not processed');
+            done();
+          });
         });
 
+      });
+
+      test('swipe to the left', function () {
+        // This test can not be automated right now because the is no programmatic API to check which item is currently being displayed to the user
+        // in practice it is possible to simulate swipe action using MockInterations.move function
+        assert.equal(true, true, '');
+      });
+
+      test('swipe to the right', function () {
+        // This test can not be automated right now because the is no programmatic API to check which item is currently being displayed to the user
+        // in practice it is possible to simulate swipe action using MockInterations.move function
+        assert.equal(true, true, '');
+      });
+
+      test('carousel scroll to the left', function () {
+        // This test can not be automated right now because the is no programmatic API to check which items are currently being displayed to the user
+        // in practice it is possible to simulate scroll action using MockInterations.move function
+        assert.equal(true, true, '');
+      });
+
+      test('carousel scroll to the right', function () {
+        // This test can not be automated right now because the is no programmatic API to check which items are currently being displayed to the user
+        // in practice it is possible to simulate scroll action using MockInterations.move function
+        assert.equal(true, true, '');
       });
 
     });
