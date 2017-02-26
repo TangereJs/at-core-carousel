@@ -216,9 +216,7 @@
           // dynamically load item-component
 
           // load item-component from other component (itemComponent = component-name/item-component) or from localfolder (item-component)
-          var compUrl = document.baseURI.toLowerCase().indexOf("/components/") >= 0 ? "../" : "components/";
-          if (document.URL.indexOf("/elements/designer-element/") >= 0) compUrl = "/components/"; // standalone designer preview?
-
+          var compUrl = this.resolveUrl("../");
           if (window.ComponentsBase != undefined) compUrl = window.ComponentsBase;
 
           var compName = this.itemComponent;
