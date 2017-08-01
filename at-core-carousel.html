@@ -13,7 +13,7 @@
         box-sizing: border-box;
       }
 
-      .swipe {
+      /*.swipe {
         overflow: hidden;
         visibility: hidden;
         position: relative;
@@ -30,10 +30,9 @@
         position: relative;
         overflow: hidden;
         box-sizing: border-box;
-      }
+      }*/
 
       .swiper-slide {
-        width: 80%;
       }
 
       /*
@@ -43,7 +42,7 @@
         display: none;
       }
 
-      .carousel {
+/*      .carousel {
         display: block;
         overflow-x: auto;
         position: relative;
@@ -59,7 +58,7 @@
         display: inline-block;
         width: 300px;
         white-space: normal;
-      }
+      }*/
 
     </style>
     <at-core-spinner id="spinner" type="wave"></at-core-spinner>
@@ -67,6 +66,11 @@
 
     <div id="insertContainer" class="swiper-container">
       <div id="insertPoint" class="swiper-wrapper"></div>
+
+      <div id="swiperPagination" class="swiper-pagination"></div>
+
+      <div id="swiperButtonNext" class="swiper-button-next"></div>
+      <div id="swiperButtonPrev" class="swiper-button-prev"></div>
     </div>
 
     <div id="staticItems" class="hidden">
@@ -290,7 +294,13 @@
         // if (renderMode === "swipe") {
           var swipeInstance = this.swipeInstance = new Swiper(insertContainer, {
             slidesPerView: 'auto',
-            spaceBetween: 30
+            spaceBetween: 30,
+            pagination: '.swiper-pagination',
+            nextButton: '.swiper-button-next',
+            prevButton: '.swiper-button-prev',            
+            // bulletClass: 'swiper-pagination-bullet style-scope at-core-carousel',
+            // bulletActiveClass: 'swiper-pagination-bullet-active style-scope at-core-carousel',
+            paginationClickable: true,
             // draggable: true
           });
         // }
@@ -329,7 +339,16 @@
           this.async(function () {
             var swipeInstance = self.swipeInstance = new Swiper(insertContainer, {
               slidesPerView: 'auto',
-              spaceBetween: 30
+              spaceBetween: 30,
+              pagination: '.swiper-pagination',
+              nextButton: '.swiper-button-next',
+              prevButton: '.swiper-button-prev',
+              paginationBulletRender: function(s, i, bulletClass) {
+                return '<span class="style-scope at-core-carousel '+ bulletClass +'"></span>';
+              },
+              // bulletClass: 'swiper-pagination-bullet style-scope at-core-carousel',
+              // bulletActiveClass: 'swiper-pagination-bullet-active style-scope at-core-carousel',
+              paginationClickable: true,
               // draggable: true
             });
           });
