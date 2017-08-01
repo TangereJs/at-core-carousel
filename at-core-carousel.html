@@ -1,12 +1,13 @@
 <link rel="import" href="../tangere/tangere.html">
 <link rel="import" href="../at-theme/at-theme.html">
 <link rel="import" href="../at-i18n/at-i18n-behavior.html">
+<link rel="import" href="lib/swiper-styles.html" />
 <link rel="import" href="swipe-import.html">
+
 
 <dom-module id="at-core-carousel">
   <template>
-    <style include="at-form-common"></style>
-    <style>
+    <style include="swiper-styles">
       :host {
         display: block;
         box-sizing: border-box;
@@ -31,7 +32,9 @@
         box-sizing: border-box;
       }
 
-      .swipe-item { }
+      .swiper-slide {
+        width: 80%;
+      }
 
       /*
        * styles for horizontal scrollable single row carousel when cards have fixed width
@@ -61,9 +64,9 @@
     </style>
     <at-core-spinner id="spinner" type="wave"></at-core-spinner>
     <at-carbon-message id="msgEmptyList" type="info"></at-carbon-message>
-    <div id="insertContainer" class="swipe">
-      <div id="insertPoint" class="swipe-wrap">
-      </div>
+
+    <div id="insertContainer" class="swiper-container">
+      <div id="insertPoint" class="swiper-wrapper"></div>
     </div>
 
     <div id="staticItems" class="hidden">
@@ -131,6 +134,7 @@
         while(insertPoint.firstChild) {
           insertPoint.removeChild(insertPoint.firstChild);
         }
+
         Polymer.dom.flush();
       },
 
@@ -145,21 +149,21 @@
 
         // remove css classes from insertContainer and insertPoint
         var insertContainer = Polymer.dom(this.$.insertContainer);
-        insertContainer.classList.remove('swipe');
-        insertContainer.classList.remove('carousel');
+        // insertContainer.classList.remove('swipe');
+        // insertContainer.classList.remove('carousel');
         var insertPoint = Polymer.dom(this.$.insertPoint);
-        insertPoint.classList.remove('swipe-wrap');
-        insertPoint.classList.remove('carousel-wrap');
+        // insertPoint.classList.remove('swipe-wrap');
+        // insertPoint.classList.remove('carousel-wrap');
 
         var renderMode = this._getRenderMode();
         if (renderMode === "carousel") {
           // render mode is carousel; add carousel classes to the insertContainer and insertPoint
-          insertContainer.classList.add('carousel');
-          insertPoint.classList.add('carousel-wrap');
+          // insertContainer.classList.add('carousel');
+          // insertPoint.classList.add('carousel-wrap');
         } else {
           // render mode is swipe; add swipe classes to the insertContainer and insertPoint
-          insertContainer.classList.add('swipe');
-          insertPoint.classList.add('swipe-wrap');
+          // insertContainer.classList.add('swipe');
+          // insertPoint.classList.add('swipe-wrap');
           renderMode = "swipe";
         }
 
@@ -245,12 +249,12 @@
 
         // create swipe item prototype for cloning
         var swipeItemPrototype = document.createElement("div");
-        if (renderMode === "carousel") {
-          Polymer.dom(swipeItemPrototype).classList.add("carousel-item");
-          swipeItemPrototype.style.width = this.cardWidth + 'px';
-        } else if (renderMode === "swipe") {
-          Polymer.dom(swipeItemPrototype).classList.add("swipe-item");
-        }
+        // if (renderMode === "carousel") {
+        //   Polymer.dom(swipeItemPrototype).classList.add("carousel-item");
+        //   swipeItemPrototype.style.width = this.cardWidth + 'px';
+        // } else if (renderMode === "swipe") {
+          Polymer.dom(swipeItemPrototype).classList.add("swiper-slide");
+        // }
 
         // create render element prototype for cloning
         var renderElementPrototype = document.createElement(renderElementName);
@@ -283,11 +287,13 @@
         if (this.swipeInstance) {
           this.swipeInstance.kill();
         }
-        if (renderMode === "swipe") {
-          var swipeInstance = this.swipeInstance = new Swipe(insertContainer, {
-            draggable: true
+        // if (renderMode === "swipe") {
+          var swipeInstance = this.swipeInstance = new Swiper(insertContainer, {
+            slidesPerView: 'auto',
+            spaceBetween: 30
+            // draggable: true
           });
-        }
+        // }
 
         this.fire("list-ready");
       },
@@ -298,7 +304,7 @@
 
         var children = this.getContentChildren('#contentInsertPoint');
         var child;
-        var className = renderMode === "carousel" ? "carousel-item" : "swipe-item";
+        var className =  "swiper-slide"; //renderMode === "carousel" ? "carousel-item" : "swipe-item";
         for (var i = 0; i < children.length; i++) {
           child = children[i];
           child.parentElement.removeChild(child);
@@ -318,14 +324,16 @@
           this.swipeInstance.kill();
         }
 
-        if (renderMode === "swipe") {
+        // if (renderMode === "swipe") {
           var self = this;
           this.async(function () {
-            var swipeInstance = self.swipeInstance = new Swipe(insertContainer, {
-              draggable: true
+            var swipeInstance = self.swipeInstance = new Swiper(insertContainer, {
+              slidesPerView: 'auto',
+              spaceBetween: 30
+              // draggable: true
             });
           });
-        }
+        // }
 
       },
 
