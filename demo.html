@@ -1,27 +1,24 @@
 <!DOCTYPE html>
 <html>
+
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
     <title>at-core-carousel demo</title>
-    
     <script src="../webcomponentsjs/webcomponents-lite.js" charset="utf-8"></script>
-    
-    <link rel="import" href="demo-bound.html">
     <link rel="import" href="demo-declarative.html">
-    
-    <style media="screen">
+    <link rel="import" href="demo-bound.html">
+    <style>
       .row {
-        margin: 12px;
+        margin-top: 32px;
       }
+
     </style>
   </head>
+
   <body>
-    <div class="row">
-        <demo-bound></demo-bound>
-    </div>
-    <div class="row">
-      <demo-declarative></demo-declarative>
-    </div>
+    <demo-declarative class="row"></demo-declarative>
+    <demo-bound class="row"></demo-bound>
   </body>
+
 </html>
