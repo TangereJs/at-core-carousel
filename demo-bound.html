@@ -19,6 +19,10 @@
         margin: 0 24px;
       }
 
+      .width-700 {
+        width: 700px;
+      }
+
       .fluid-width-container {
         width: 100%;
         background-color: bisque;
@@ -65,7 +69,7 @@
       </div>
     </div>
 
-<!--     <div class="row">
+    <div class="row">
       <h3>Demo 2</h3>
       <div class="description">
         <ul>
@@ -112,6 +116,31 @@
     </div>
 
     <div class="row">
+      <h3>Demo 3.1</h3>
+      <div class="description">
+        <ul>
+          <li>Carousel is inside fixed width container (700px).</li>
+          <li>Carousel has mode=bound.</li>
+          <li>Carousel has card-width="450". This sets renderMode to carousel and each carousel item has a fixed width of 450px</li>
+          <li>CenteredSlides attribute is set to true. With container width of 500px next slide is not partially visible since that space is used for centering.</li>
+          <li>We increase container width to provide space for next slide to be visible.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>HTML</h3>
+        <div class="code-container">
+          <code>&lt;at-core-carousel mode=&quot;bound&quot; items=&quot;data&quot; item-component=&quot;demo-item&quot; card-width=&quot;450&quot;&gt;&lt;/at-core-carousel&gt;</code>
+        </div>
+      </div>
+      <div>
+        <h3>Preview</h3>
+        <div class="fixed-width-container width-700">
+          <at-core-carousel mode="bound" items="{{data}}" item-component="demo-item" card-width="450" centered-slides></at-core-carousel>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
       <h3>Demo 4</h3>
       <div class="description">
         <ul>
@@ -132,7 +161,7 @@
           <at-core-carousel mode="bound" items="{{data}}" item-component="demo-item" card-width="450"></at-core-carousel>
         </div>
       </div>
-    </div> -->
+    </div>
 
   </template>
 </dom-module>

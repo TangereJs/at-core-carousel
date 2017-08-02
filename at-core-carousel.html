@@ -114,6 +114,11 @@
         emptyList: {
           type: String,
           value: "No data found"
+        },
+
+        centeredSlides: {
+          type: Boolean,
+          value: false
         }
       },
 
@@ -252,12 +257,12 @@
 
         // create swipe item prototype for cloning
         var swipeItemPrototype = document.createElement("div");
-        // if (renderMode === "carousel") {
-        //   Polymer.dom(swipeItemPrototype).classList.add("carousel-item");
-        //   swipeItemPrototype.style.width = this.cardWidth + 'px';
+        Polymer.dom(swipeItemPrototype).classList.add("swiper-slide");
+        if (renderMode === "carousel") {
+          // Polymer.dom(swipeItemPrototype).classList.add("carousel-item");
+          swipeItemPrototype.style.width = this.cardWidth + 'px';
         // } else if (renderMode === "swipe") {
-          Polymer.dom(swipeItemPrototype).classList.add("swiper-slide");
-        // }
+        }
 
         // create render element prototype for cloning
         var renderElementPrototype = document.createElement(renderElementName);
@@ -296,11 +301,12 @@
             spaceBetween: 30,
             pagination: '.swiper-pagination',
             nextButton: '.swiper-button-next',
-            prevButton: '.swiper-button-prev',            
-            // bulletClass: 'swiper-pagination-bullet style-scope at-core-carousel',
-            // bulletActiveClass: 'swiper-pagination-bullet-active style-scope at-core-carousel',
+            prevButton: '.swiper-button-prev',
+              paginationBulletRender: function(s, i, bulletClass) {
+                return '<span class="style-scope at-core-carousel '+ bulletClass +'"></span>';
+              },
             paginationClickable: true,
-            centeredSlides: true,
+            centeredSlides: this.centeredSlides,
             // draggable: true
           });
         // }
@@ -349,7 +355,7 @@
               // bulletClass: 'swiper-pagination-bullet style-scope at-core-carousel',
               // bulletActiveClass: 'swiper-pagination-bullet-active style-scope at-core-carousel',
               paginationClickable: true,
-              centeredSlides: true,
+              centeredSlides: this.centeredSlides,
               // draggable: true
             });
           });
