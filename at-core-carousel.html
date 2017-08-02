@@ -79,7 +79,6 @@
 
   </template>
   <script>
-    'use strict';
     Polymer({
       is: 'at-core-carousel',
       behaviors: [ Tangere.behaviors.i18n ],
@@ -301,6 +300,7 @@
             // bulletClass: 'swiper-pagination-bullet style-scope at-core-carousel',
             // bulletActiveClass: 'swiper-pagination-bullet-active style-scope at-core-carousel',
             paginationClickable: true,
+            centeredSlides: true,
             // draggable: true
           });
         // }
@@ -349,6 +349,7 @@
               // bulletClass: 'swiper-pagination-bullet style-scope at-core-carousel',
               // bulletActiveClass: 'swiper-pagination-bullet-active style-scope at-core-carousel',
               paginationClickable: true,
+              centeredSlides: true,
               // draggable: true
             });
           });
