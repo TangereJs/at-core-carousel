@@ -11,28 +11,15 @@
       :host {
         display: block;
         box-sizing: border-box;
-      }
-
-      /*.swipe {
-        overflow: hidden;
-        visibility: hidden;
         position: relative;
       }
 
-      .swipe-wrap {
-        overflow: hidden;
-        position: relative;
+      .swiper-container {
+        /*margin: 0 50px;*/
       }
 
-      .swipe-wrap > div {
-        float: left;
-        width: 100%;
-        position: relative;
-        overflow: hidden;
-        box-sizing: border-box;
-      }*/
-
-      .swiper-slide {
+      .swiper-pagination {
+        /*position: static;*/
       }
 
       /*
@@ -42,38 +29,26 @@
         display: none;
       }
 
-/*      .carousel {
-        display: block;
-        overflow-x: auto;
-        position: relative;
-        white-space: nowrap;
-        transform: translate3d(0,0,0);
-      }
-
-      .carousel-wrap {
-        display: inline-block;
-      }
-
-      .carousel-item {
-        display: inline-block;
-        width: 300px;
-        white-space: normal;
-      }*/
-
+      .navigationAsOverlay-margins {
+        margin: 0 50px 30px 50px;
+      }      
     </style>
+
     <at-core-spinner id="spinner" type="wave"></at-core-spinner>
+    
     <at-carbon-message id="msgEmptyList" type="info"></at-carbon-message>
 
     <div id="insertContainer" class="swiper-container">
       <div id="insertPoint" class="swiper-wrapper"></div>
-
+      
       <div id="swiperPagination" class="swiper-pagination"></div>
-
-      <div id="swiperButtonNext" class="swiper-button-next"></div>
-      <div id="swiperButtonPrev" class="swiper-button-prev"></div>
     </div>
+    
+    <div id="swiperButtonNext" class="swiper-button-next"></div>
+    <div id="swiperButtonPrev" class="swiper-button-prev"></div>
+      
 
-    <div id="staticItems" class="hidden">
+    <div id="staticItems" hidden>
       <content id="contentInsertPoint" select="*"></content>
     </div>
 
@@ -83,40 +58,51 @@
       is: 'at-core-carousel',
       behaviors: [ Tangere.behaviors.i18n ],
       properties: {
+        
         items: {
           type: Array,
           value: function() {
             return [];
           }
         },
+
         itemComponent: {
           type: String,
           value: "",
           notify: true
         },
+
         cardWidth: {
           type: Number,
           value: 320,
           notify: true
         },
+
         mode: {
           type: String,
           value: "static",
           xtype: "enum",
           xvaluelist: "static,bound"
         },
+
         indicator: {
           type: Boolean,
           value: false,
           reflectToAttribute: true,
           observer: "changeIndicator"
         },
+
         emptyList: {
           type: String,
           value: "No data found"
         },
 
         centeredSlides: {
+          type: Boolean,
+          value: false
+        },
+
+        navigationAsOverlay: {
           type: Boolean,
           value: false
         }
@@ -241,7 +227,7 @@
             alert(window.location.href + "\n\nERROR: failed to load list item " + this.itemComponent);
             location.hash = ""; // clear current hash
             location.reload(); // go to start app by reloading without hash
-          });
+          }, true);
         } else {
           // with inline template binding can happen immediately
           this._bindItems(renderMode);
@@ -275,8 +261,13 @@
           var renderItemData = this.items[i];
 
           var swipeItem = swipeItemPrototype.cloneNode(true);
+
           var renderElement = document.createElement(renderElementName);
           renderElement.item = renderItemData;
+
+          if (this.navigationAsOverlay) {
+            renderElement.classList.add('navigationAsOverlay-margins');
+          }
 
           Polymer.dom(swipeItem).appendChild(renderElement);
           Polymer.dom(insertPoint).appendChild(swipeItem);
@@ -298,10 +289,10 @@
         // if (renderMode === "swipe") {
           var swipeInstance = this.swipeInstance = new Swiper(insertContainer, {
             slidesPerView: 'auto',
-            spaceBetween: 30,
-            pagination: '.swiper-pagination',
-            nextButton: '.swiper-button-next',
-            prevButton: '.swiper-button-prev',
+            // spaceBetween: 50,
+            pagination: this.$.swiperPagination, //'.swiper-pagination',
+            nextButton: this.$.swiperButtonNext, //'.swiper-button-next',
+            prevButton: this.$.swiperButtonPrev, // '.swiper-button-prev',
               paginationBulletRender: function(s, i, bulletClass) {
                 return '<span class="style-scope at-core-carousel '+ bulletClass +'"></span>';
               },
@@ -318,6 +309,9 @@
         var staticItems = Polymer.dom(this.$.staticItems);
         var insertPoint = Polymer.dom(this.$.insertPoint);
 
+        var swiperSlidePrototype = document.createElement('div');
+        swiperSlidePrototype.classList.add('swiper-slide');
+
         var children = this.getContentChildren('#contentInsertPoint');
         var child;
         var className =  "swiper-slide"; //renderMode === "carousel" ? "carousel-item" : "swipe-item";
@@ -325,11 +319,18 @@
           child = children[i];
           child.parentElement.removeChild(child);
           if (child.nodeType !== 3) {
+            var swiperSlide = swiperSlidePrototype.cloneNode(true);
             if (renderMode === "carousel") {
-              child.style.width = this.cardWidth + 'px';
+              swiperSlide.style.width = this.cardWidth + 'px';
             }
-            child.classList.add(className);
-            insertPoint.appendChild(child);
+            // child.classList.add(className);
+
+            if (this.navigationAsOverlay) {
+              child.classList.add('navigationAsOverlay-margins');
+            }
+
+            swiperSlide.appendChild(child);
+            insertPoint.appendChild(swiperSlide);
           }
         }
 
@@ -345,17 +346,17 @@
           this.async(function () {
             var swipeInstance = self.swipeInstance = new Swiper(insertContainer, {
               slidesPerView: 'auto',
-              spaceBetween: 30,
-              pagination: '.swiper-pagination',
-              nextButton: '.swiper-button-next',
-              prevButton: '.swiper-button-prev',
+              // spaceBetween: 30,
+              pagination: this.$.swiperPagination, //'.swiper-pagination',
+              nextButton: this.$.swiperButtonNext, //'.swiper-button-next',
+              prevButton: this.$.swiperButtonPrev, // '.swiper-button-prev',
               paginationBulletRender: function(s, i, bulletClass) {
                 return '<span class="style-scope at-core-carousel '+ bulletClass +'"></span>';
               },
               // bulletClass: 'swiper-pagination-bullet style-scope at-core-carousel',
               // bulletActiveClass: 'swiper-pagination-bullet-active style-scope at-core-carousel',
               paginationClickable: true,
-              centeredSlides: this.centeredSlides,
+              // centeredSlides: this.centeredSlides,
               // draggable: true
             });
           });
