@@ -1,16 +1,20 @@
 <link rel="import" href="../tangere/tangere.html">
+<link rel="import" href="../at-core-style-classes/at-core-style-classes.html" />
 <link rel="import" href="at-core-carousel.html">
+<link rel="import" href="declarative-item.html" />
 
 <dom-module id="demo-declarative">
   <template>
-    <style>
-      :host {
+    <style include="at-core-style-classes">
+       :host {
         display: block;
+        box-sizing: border-box;
       }
 
       .row {
-        margin: 0 12px;
-        padding: 4px 0;
+        margin: 12px;
+        padding: 12px;
+        border: 1px solid purple;
       }
 
       .fixed-width-container {
@@ -20,7 +24,6 @@
       }
 
       .fluid-width-container {
-        width: 100%;
         background-color: bisque;
         margin: 0 24px;
       }
@@ -33,208 +36,266 @@
       .code-container {
         margin: 0 12px;
       }
+
     </style>
 
     <div class="row">
-      <h2>Demos where items are provided declaratively</h2>
-      <h4>
-        Items and data are rendered as specified declaratively
-      </h4>
+      <div class="font-headline">Declarative examples</div>
+      <div class="font-subhead">Items and data are rendered as specified declaratively.</div>
     </div>
 
     <div class="row">
-      <h3>Demo 1</h3>
-      <div class="description">
-        <ul>
-          <li>Carousel is inside fixed width container (500px).</li>
-          <li>Carousel has mode=static.</li>
-          <li>Carousel has card-width="". This sets renderMode to swipe and each swipe item has 100% width of carousel</li>
-        </ul>
-      </div>
-      <div>
-        <h3>HTML</h3>
-        <div class="code-container">
-          <code>&lt;at-core-carousel mode=&quot;static&quot; card-width=&quot;&quot;&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 1&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 2&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 3&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 4&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 5&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 6&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>          &lt;/at-core-carousel&gt;</code>
-        </div>
-      </div>
-      <div>
-        <h3>Preview</h3>
-        <div class="fixed-width-container">
-          <at-core-carousel mode="static" card-width="" navigation-as-overlay indicator>
-            <div>
-              <p>Item 1</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-            <div>
-              <p>Item 2</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-            <div>
-              <p>Item 3</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-            <div>
-              <p>Item 4</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-            <div>
-              <p>Item 5</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-            <div>
-              <p>Item 6</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-          </at-core-carousel>
-        </div>
+      <h3 class="font-title">Demo 1</h3>
+      <ul class="font-body1">
+        <li>Carousel is inside fixed width container (500px).</li>
+        <li>Carousel has card-width="". This sets renderMode to swipe and each swipe item has 100% width of carousel</li>
+        <li>navigation-as-overlay attribute is false. Navigation arrows and pagination will not overlay carousel items</li>
+      </ul>
+
+      <h3 class="font-title">Preview</h3>
+      <div class="fixed-width-container">
+        <at-core-carousel mode="static" card-width="">
+          <declarative-item title="Item 1"></declarative-item>
+          <declarative-item title="Item 2"></declarative-item>
+          <declarative-item title="Item 3"></declarative-item>
+          <declarative-item title="Item 4"></declarative-item>
+          <declarative-item title="Item 5"></declarative-item>
+          <declarative-item title="Item 6"></declarative-item>
+        </at-core-carousel>
       </div>
     </div>
 
     <div class="row">
-      <h3>Demo 2</h3>
-      <div class="description">
-        <ul>
-          <li>Carousel is inside fluid width container (100%).</li>
-          <li>Carousel has mode=static.</li>
-          <li>Carousel has card-width="100%". This sets renderMode to swipe and each swipe item has 100% width of carousel</li>
-        </ul>
+      <h3 class="font-title">Demo 2</h3>
+      <ul class="font-body1">
+        <li>Carousel is inside fixed width container (500px).</li>
+        <li>Carousel has card-width="". This sets renderMode to swipe and each swipe item has 100% width of carousel</li>
+        <li>navigation-as-overlay attribute is true. Navigation arrows and pagination will overlay carousel items</li>
+      </ul>
+
+      <h3 class="font-title">Preview</h3>
+      <div class="fixed-width-container">
+        <at-core-carousel mode="static" card-width="" navigation-as-overlay>
+          <declarative-item title="Item 1"></declarative-item>
+          <declarative-item title="Item 2"></declarative-item>
+          <declarative-item title="Item 3"></declarative-item>
+          <declarative-item title="Item 4"></declarative-item>
+          <declarative-item title="Item 5"></declarative-item>
+          <declarative-item title="Item 6"></declarative-item>
+        </at-core-carousel>
       </div>
-      <div>
-        <h3>HTML</h3>
-        <div class="code-container">
-          <code>&lt;at-core-carousel mode=&quot;static&quot; card-width=&quot;100%&quot;&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 1&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 2&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 3&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 4&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 5&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 6&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>          &lt;/at-core-carousel&gt;</code>
-        </div>
+    </div>
+
+    <div class="row">
+      <h3 class="font-title">Demo 3</h3>
+      <ul class="font-body1">
+        <li>Carousel is inside fixed width container (500px).</li>
+        <li>Carousel has card-width="100%". This sets renderMode to swipe and each swipe item has 100% width of carousel</li>
+        <li>navigation-as-overlay attribute is false. Navigation arrows and pagination will not overlay carousel items</li>
+      </ul>
+
+      <h3 class="font-title">Preview</h3>
+      <div class="fixed-width-container">
+        <at-core-carousel mode="static" card-width="100%">
+          <declarative-item title="Item 1"></declarative-item>
+          <declarative-item title="Item 2"></declarative-item>
+          <declarative-item title="Item 3"></declarative-item>
+          <declarative-item title="Item 4"></declarative-item>
+          <declarative-item title="Item 5"></declarative-item>
+          <declarative-item title="Item 6"></declarative-item>
+        </at-core-carousel>
       </div>
-      <div>
-        <h3>Preview</h3>
-        <div class="fluid-width-container">
-          <at-core-carousel mode="static" card-width="100%" navigation-as-overlay>
-            <div>
-              <p>Item 1</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-            <div>
-              <p>Item 2</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-            <div>
-              <p>Item 3</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-            <div>
-              <p>Item 4</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-            <div>
-              <p>Item 5</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-            <div>
-              <p>Item 6</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-          </at-core-carousel>
-        </div>
+    </div>
+
+    <div class="row">
+      <h3 class="font-title">Demo 4</h3>
+      <ul class="font-body1">
+        <li>Carousel is inside fixed width container (500px).</li>
+        <li>Carousel has card-width="100%". This sets renderMode to swipe and each swipe item has 100% width of carousel</li>
+        <li>navigation-as-overlay attribute is true. Navigation arrows and pagination will overlay carousel items</li>
+      </ul>
+
+      <h3 class="font-title">Preview</h3>
+      <div class="fixed-width-container">
+        <at-core-carousel mode="static" card-width="100%" navigation-as-overlay>
+          <declarative-item title="Item 1"></declarative-item>
+          <declarative-item title="Item 2"></declarative-item>
+          <declarative-item title="Item 3"></declarative-item>
+          <declarative-item title="Item 4"></declarative-item>
+          <declarative-item title="Item 5"></declarative-item>
+          <declarative-item title="Item 6"></declarative-item>
+        </at-core-carousel>
+      </div>
+    </div>
+
+    <div class="row">
+      <h3 class="font-title">Demo 5</h3>
+      <ul class="font-body1">
+        <li>Carousel is inside fixed width container (500px).</li>
+        <li>Carousel has card-width="450". This sets renderMode to carousel and each carousel item has width of 450px</li>
+        <li>navigation-as-overlay attribute is false. Navigation arrows and pagination will not overlay carousel items</li>
+      </ul>
+
+      <h3 class="font-title">Preview</h3>
+      <div class="fixed-width-container">
+        <at-core-carousel mode="static" card-width="450">
+          <declarative-item title="Item 1"></declarative-item>
+          <declarative-item title="Item 2"></declarative-item>
+          <declarative-item title="Item 3"></declarative-item>
+          <declarative-item title="Item 4"></declarative-item>
+          <declarative-item title="Item 5"></declarative-item>
+          <declarative-item title="Item 6"></declarative-item>
+        </at-core-carousel>
+      </div>
+    </div>
+
+    <div class="row">
+      <h3 class="font-title">Demo 6</h3>
+      <ul class="font-body1">
+        <li>Carousel is inside fixed width container (500px).</li>
+        <li>Carousel has card-width="450". This sets renderMode to carousel and each carousel item has width of 450px</li>
+        <li>navigation-as-overlay attribute is true. Navigation arrows and pagination will overlay carousel items</li>
+      </ul>
+
+      <h3 class="font-title">Preview</h3>
+      <div class="fixed-width-container">
+        <at-core-carousel mode="static" card-width="450" navigation-as-overlay>
+          <declarative-item title="Item 1"></declarative-item>
+          <declarative-item title="Item 2"></declarative-item>
+          <declarative-item title="Item 3"></declarative-item>
+          <declarative-item title="Item 4"></declarative-item>
+          <declarative-item title="Item 5"></declarative-item>
+          <declarative-item title="Item 6"></declarative-item>
+        </at-core-carousel>
       </div>
     </div>
 
 
     <div class="row">
-      <h3>Demo 3</h3>
-      <div class="description">
-        <ul>
-          <li>Carousel is inside fixed width container (500px).</li>
-          <li>Carousel has mode=static.</li>
-          <li>Carousel has card-width="450". This sets renderMode to carousel and each carousel item has width of 450px</li>
-        </ul>
-      </div>
-      <div>
-        <h3>HTML</h3>
-        <div class="code-container">
-          <code>&lt;at-core-carousel mode=&quot;static&quot; card-width=&quot;450&quot;&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 1&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 2&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 3&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 4&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 5&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 6&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>          &lt;/at-core-carousel&gt;</code>
-        </div>
-      </div>
-      <div>
-        <h3>Preview</h3>
-        <div class="fixed-width-container">
-          <at-core-carousel mode="static" card-width="450" navigation-as-overlay>
-            <div>
-              <p>Item 1</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-            <div>
-              <p>Item 2</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-            <div>
-              <p>Item 3</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-            <div>
-              <p>Item 4</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-            <div>
-              <p>Item 5</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-            <div>
-              <p>Item 6</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-          </at-core-carousel>
-        </div>
+      <h3 class="font-title">Demo 7</h3>
+      <ul class="font-body1">
+        <li>Carousel is inside fluid width container (100%).</li>
+        <li>Carousel has card-width="". This sets renderMode to swipe and each swipe item has 100% width of carousel</li>
+        <li>navigation-as-overlay attribute is false. Navigation arrows and pagination will not overlay carousel items</li>
+      </ul>
+
+      <h3 class="font-title">Preview</h3>
+      <div class="fluid-width-container">
+        <at-core-carousel mode="static" card-width="">
+          <declarative-item title="Item 1"></declarative-item>
+          <declarative-item title="Item 2"></declarative-item>
+          <declarative-item title="Item 3"></declarative-item>
+          <declarative-item title="Item 4"></declarative-item>
+          <declarative-item title="Item 5"></declarative-item>
+          <declarative-item title="Item 6"></declarative-item>
+        </at-core-carousel>
       </div>
     </div>
 
     <div class="row">
-      <h3>Demo 4</h3>
-      <div class="description">
-        <ul>
-          <li>Carousel is inside fluid width container (100%).</li>
-          <li>Carousel has mode=static.</li>
-          <li>Carousel has card-width="450". This sets renderMode to carousel and each carousel item has width of 450px</li>
-        </ul>
-      </div>
-      <div>
-        <h3>HTML</h3>
-        <div class="code-container">
-          <code>&lt;at-core-carousel mode=&quot;static&quot; card-width=&quot;450&quot;&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 1&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 2&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 3&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 4&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 5&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>            &lt;div&gt;<br/>              &lt;p&gt;Item 6&lt;/p&gt;<br/>              &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor&lt;/p&gt;<br/>            &lt;/div&gt;<br/>          &lt;/at-core-carousel&gt;</code>
-        </div>
-      </div>
-      <div>
-        <h3>Preview</h3>
-        <div class="fluid-width-container">
-          <at-core-carousel mode="static" card-width="450" navigation-as-overlay>
-            <div>
-              <p>Item 1</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-            <div>
-              <p>Item 2</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-            <div>
-              <p>Item 3</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-            <div>
-              <p>Item 4</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-            <div>
-              <p>Item 5</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-            <div>
-              <p>Item 6</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</p>
-            </div>
-          </at-core-carousel>
-        </div>
+      <h3 class="font-title">Demo 8</h3>
+      <ul class="font-body1">
+        <li>Carousel is inside fluid width container (100%).</li>
+        <li>Carousel has card-width="". This sets renderMode to swipe and each swipe item has 100% width of carousel</li>
+        <li>navigation-as-overlay attribute is true. Navigation arrows and pagination will overlay carousel items</li>
+      </ul>
+
+      <h3 class="font-title">Preview</h3>
+      <div class="fluid-width-container">
+        <at-core-carousel mode="static" card-width="" navigation-as-overlay>
+          <declarative-item title="Item 1"></declarative-item>
+          <declarative-item title="Item 2"></declarative-item>
+          <declarative-item title="Item 3"></declarative-item>
+          <declarative-item title="Item 4"></declarative-item>
+          <declarative-item title="Item 5"></declarative-item>
+          <declarative-item title="Item 6"></declarative-item>
+        </at-core-carousel>
       </div>
     </div>
 
+    <div class="row">
+      <h3 class="font-title">Demo 9</h3>
+      <ul class="font-body1">
+        <li>Carousel is inside fluid width container (100%).</li>
+        <li>Carousel has card-width="100%". This sets renderMode to swipe and each swipe item has 100% width of carousel</li>
+        <li>navigation-as-overlay attribute is false. Navigation arrows and pagination will not overlay carousel items</li>
+      </ul>
+
+      <h3 class="font-title">Preview</h3>
+      <div class="fluid-width-container">
+        <at-core-carousel mode="static" card-width="100%">
+          <declarative-item title="Item 1"></declarative-item>
+          <declarative-item title="Item 2"></declarative-item>
+          <declarative-item title="Item 3"></declarative-item>
+          <declarative-item title="Item 4"></declarative-item>
+          <declarative-item title="Item 5"></declarative-item>
+          <declarative-item title="Item 6"></declarative-item>
+        </at-core-carousel>
+      </div>
+    </div>
+
+    <div class="row">
+      <h3 class="font-title">Demo 10</h3>
+      <ul class="font-body1">
+        <li>Carousel is inside fluid width container (100%).</li>
+        <li>Carousel has card-width="100%". This sets renderMode to swipe and each swipe item has 100% width of carousel</li>
+        <li>navigation-as-overlay attribute is true. Navigation arrows and pagination will overlay carousel items</li>
+      </ul>
+
+      <h3 class="font-title">Preview</h3>
+      <div class="fluid-width-container">
+        <at-core-carousel mode="static" card-width="100%" navigation-as-overlay>
+          <declarative-item title="Item 1"></declarative-item>
+          <declarative-item title="Item 2"></declarative-item>
+          <declarative-item title="Item 3"></declarative-item>
+          <declarative-item title="Item 4"></declarative-item>
+          <declarative-item title="Item 5"></declarative-item>
+          <declarative-item title="Item 6"></declarative-item>
+        </at-core-carousel>
+      </div>
+    </div>
+
+    <div class="row">
+      <h3 class="font-title">Demo 11</h3>
+      <ul class="font-body1">
+        <li>Carousel is inside fluid width container (100%).</li>
+        <li>Carousel has card-width="450". This sets renderMode to carousel and each carousel item has width of 450px</li>
+        <li>navigation-as-overlay attribute is false. Navigation arrows and pagination will not overlay carousel items</li>
+      </ul>
+
+      <h3 class="font-title">Preview</h3>
+      <div class="fluid-width-container">
+        <at-core-carousel mode="static" card-width="450">
+          <declarative-item title="Item 1"></declarative-item>
+          <declarative-item title="Item 2"></declarative-item>
+          <declarative-item title="Item 3"></declarative-item>
+          <declarative-item title="Item 4"></declarative-item>
+          <declarative-item title="Item 5"></declarative-item>
+          <declarative-item title="Item 6"></declarative-item>
+        </at-core-carousel>
+      </div>
+    </div>
+
+    <div class="row">
+      <h3 class="font-title">Demo 12</h3>
+      <ul class="font-body1">
+        <li>Carousel is inside fluid width container (100%).</li>
+        <li>Carousel has card-width="450". This sets renderMode to carousel and each carousel item has width of 450px</li>
+        <li>navigation-as-overlay attribute is true. Navigation arrows and pagination will overlay carousel items</li>
+      </ul>
+
+      <h3 class="font-title">Preview</h3>
+      <div class="fluid-width-container">
+        <at-core-carousel mode="static" card-width="450" navigation-as-overlay>
+          <declarative-item title="Item 1"></declarative-item>
+          <declarative-item title="Item 2"></declarative-item>
+          <declarative-item title="Item 3"></declarative-item>
+          <declarative-item title="Item 4"></declarative-item>
+          <declarative-item title="Item 5"></declarative-item>
+          <declarative-item title="Item 6"></declarative-item>
+        </at-core-carousel>
+      </div>
+    </div>    
 
   </template>
 </dom-module>
@@ -243,4 +304,5 @@
   Polymer({
     is: 'demo-declarative'
   });
+
 </script>
