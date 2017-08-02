@@ -1,6 +1,10 @@
 <link rel="import" href="../tangere/tangere.html">
 <link rel="import" href="../at-theme/at-theme.html">
 <link rel="import" href="../at-i18n/at-i18n-behavior.html">
+<link rel="import" href="../at-core-spinner/at-core-spinner.html" />
+<link rel="import" href="../at-carbon-message/at-carbon-message.html" />
+
+
 <link rel="import" href="lib/swiper-styles.html" />
 <link rel="import" href="swipe-import.html">
 
@@ -85,13 +89,6 @@
           xvaluelist: "static,bound"
         },
 
-        indicator: {
-          type: Boolean,
-          value: false,
-          reflectToAttribute: true,
-          observer: "changeIndicator"
-        },
-
         emptyList: {
           type: String,
           value: "No data found"
@@ -112,11 +109,9 @@
         'initialize(items.*, itemComponent, cardWidth, emptyList)'
       ],
 
-      changeIndicator: function() {
-        this.$.spinner.display = this.indicator ? "block" : "none";
-        if (this.indicator) {
-          this.clear();
-        }
+      attached: function() {
+        this.isAttached = true;
+        this.initialize();
       },
 
       clear: function() {
@@ -172,6 +167,8 @@
           // TODO: localize
           Polymer.dom(mel).innerHTML = this.T("Mode {0} is invalid.", mode);
         }
+
+        this.$.spinner.display = 'none';
 
       },
 
@@ -383,12 +380,8 @@
 
       _isArray: function (obj) {
         return Object.prototype.toString.call(obj) === "[object Array]";
-      },
-
-      attached: function() {
-        this.isAttached = true;
-        this.initialize();
       }
+
     });
   </script>
 </dom-module>
