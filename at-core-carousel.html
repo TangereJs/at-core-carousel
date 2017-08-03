@@ -18,12 +18,18 @@
         position: relative;
       }
 
-      .swiper-container {
-        /*margin: 0 50px;*/
+      .swiper-container-no-overlay {
+        margin: 0 50px;
       }
 
+      .swiper-pagination-no-overlay {
+        position: static;
+      }
+
+      .swiper-button-next,
+      .swiper-button-prev,
       .swiper-pagination {
-        /*position: static;*/
+        border: 1px solid green;
       }
 
       /*
@@ -33,7 +39,8 @@
         display: none;
       }
 
-      .navigationAsOverlay-margins {
+      /* @Cleanup This class name is DUMB. Pick a better one */
+      .navigation-as-overlay {
         margin: 0 50px 30px 50px;
       }      
     </style>
@@ -102,6 +109,11 @@
         navigationAsOverlay: {
           type: Boolean,
           value: false
+        },
+
+        spaceBetween: {
+          type: Number,
+          value: 0
         }
       },
 
@@ -128,48 +140,25 @@
       },
 
       initialize: function() {
-        if (!this.isAttached) {
-          return ;
-        }
+        if (!this.isAttached) return;
 
         // clear previous error message
-        var mel = this.$.msgEmptyList;
-        mel.html = "";
-
-        // remove css classes from insertContainer and insertPoint
-        var insertContainer = Polymer.dom(this.$.insertContainer);
-        // insertContainer.classList.remove('swipe');
-        // insertContainer.classList.remove('carousel');
-        var insertPoint = Polymer.dom(this.$.insertPoint);
-        // insertPoint.classList.remove('swipe-wrap');
-        // insertPoint.classList.remove('carousel-wrap');
+        this.$.msgEmptyList.html = "";
 
         var renderMode = this._getRenderMode();
-        if (renderMode === "carousel") {
-          // render mode is carousel; add carousel classes to the insertContainer and insertPoint
-          // insertContainer.classList.add('carousel');
-          // insertPoint.classList.add('carousel-wrap');
-        } else {
-          // render mode is swipe; add swipe classes to the insertContainer and insertPoint
-          // insertContainer.classList.add('swipe');
-          // insertPoint.classList.add('swipe-wrap');
-          renderMode = "swipe";
-        }
 
         // check mode and initialize correct data source
         var mode = this.mode;
         if (mode === "bound") {
           this._initializeBoundDataSource(renderMode);
+
         } else if (mode === "static") {
           this._initializeStaticDataSource(renderMode);
+
         } else {
           // invalid mode specified
-          // TODO: localize
-          Polymer.dom(mel).innerHTML = this.T("Mode {0} is invalid.", mode);
-        }
-
-        this.$.spinner.display = 'none';
-
+          this.$.msgEmptyList.html = this.T("Mode {0} is invalid.", mode);
+        }       
       },
 
       _initializeBoundDataSource: function(renderMode) {
@@ -195,8 +184,12 @@
           return;
         }
 
+        function isArray(obj) {
+          return Object.prototype.toString.apply(obj) === "[object Array]";
+        }
+
         // show error if items is an empty array
-        if (this._isArray(items) && items.length === 0) {
+        if (this.isArray(items) && items.length === 0) {
           errorCarbonMsg.html = this.emptyList;
           return;
         }
@@ -263,7 +256,7 @@
           renderElement.item = renderItemData;
 
           if (this.navigationAsOverlay) {
-            renderElement.classList.add('navigationAsOverlay-margins');
+            renderElement.classList.add('navigation-as-overlay');
           }
 
           Polymer.dom(swipeItem).appendChild(renderElement);
@@ -280,11 +273,11 @@
 
         Polymer.dom.flush();
 
-        if (this.swipeInstance) {
-          this.swipeInstance.kill();
+        if (this._swipeInstance) {
+          this._swipeInstance.kill();
         }
         // if (renderMode === "swipe") {
-          var swipeInstance = this.swipeInstance = new Swiper(insertContainer, {
+          var swipeInstance = this._swipeInstance = new Swiper(insertContainer, {
             slidesPerView: 'auto',
             // spaceBetween: 50,
             pagination: this.$.swiperPagination, //'.swiper-pagination',
@@ -303,62 +296,66 @@
       },
 
       _initializeStaticDataSource: function (renderMode) {
-        var staticItems = Polymer.dom(this.$.staticItems);
+
         var insertPoint = Polymer.dom(this.$.insertPoint);
 
         var swiperSlidePrototype = document.createElement('div');
         swiperSlidePrototype.classList.add('swiper-slide');
-
-        var children = this.getContentChildren('#contentInsertPoint');
-        var child;
-        var className =  "swiper-slide"; //renderMode === "carousel" ? "carousel-item" : "swipe-item";
-        for (var i = 0; i < children.length; i++) {
-          child = children[i];
-          child.parentElement.removeChild(child);
-          if (child.nodeType !== 3) {
-            var swiperSlide = swiperSlidePrototype.cloneNode(true);
-            if (renderMode === "carousel") {
-              swiperSlide.style.width = this.cardWidth + 'px';
-            }
-            // child.classList.add(className);
-
-            if (this.navigationAsOverlay) {
-              child.classList.add('navigationAsOverlay-margins');
-            }
-
-            swiperSlide.appendChild(child);
-            insertPoint.appendChild(swiperSlide);
-          }
+        if (renderMode === "carousel") {
+          swiperSlidePrototype.style.width = this.cardWidth + 'px';
         }
 
-        Polymer.dom.flush();
+        var children = this.getEffectiveChildren();
+        
+        Array.prototype.forEach.call(children, function(child, index){ 
+          
+          child.parentElement.removeChild(child);          
+
+          var swiperSlide = swiperSlidePrototype.cloneNode(true);
+          swiperSlide.appendChild(child);
+          insertPoint.appendChild(swiperSlide);
+
+          if (!this.navigationAsOverlay) {
+            if (renderMode === "swipe") {
+              child.classList.add('navigation-as-overlay');
+            } else if (renderMode === "carousel") {
+              this.$.insertContainer.classList.add('swiper-container-no-overlay');
+              this.$.swiperPagination.classList.add('swiper-pagination-no-overlay');
+            }
+          }
+
+        }, this);
+
         var insertContainer = this.$.insertContainer;
 
-        if (this.swipeInstance) {
-          this.swipeInstance.kill();
+        if (this._swipeInstance) {
+          this._swipeInstance.destroy();
         }
 
-        // if (renderMode === "swipe") {
-          var self = this;
-          this.async(function () {
-            var swipeInstance = self.swipeInstance = new Swiper(insertContainer, {
-              slidesPerView: 'auto',
-              // spaceBetween: 30,
-              pagination: this.$.swiperPagination, //'.swiper-pagination',
-              nextButton: this.$.swiperButtonNext, //'.swiper-button-next',
-              prevButton: this.$.swiperButtonPrev, // '.swiper-button-prev',
-              paginationBulletRender: function(s, i, bulletClass) {
-                return '<span class="style-scope at-core-carousel '+ bulletClass +'"></span>';
-              },
-              // bulletClass: 'swiper-pagination-bullet style-scope at-core-carousel',
-              // bulletActiveClass: 'swiper-pagination-bullet-active style-scope at-core-carousel',
-              paginationClickable: true,
-              // centeredSlides: this.centeredSlides,
-              // draggable: true
-            });
-          });
-        // }
-
+        var spinner = this.$.spinner;
+        var self = this;
+        var swiperOptions = {
+          centeredSlides: this.centeredSlides,
+          pagination: this.$.swiperPagination,
+          nextButton: this.$.swiperButtonNext,
+          prevButton: this.$.swiperButtonPrev,
+          paginationBulletRender: function(s, i, bulletClass) {
+            return '<span class="style-scope at-core-carousel '+ bulletClass +'"></span>';
+          },
+          paginationClickable: true,
+          onInit: function() {
+            self.$.spinner.display = 'none';
+          }
+        };
+        
+        if (renderMode === "carousel") {
+          swiperOptions.slidesPerView = 'auto';
+          if (!isNaN(this.spaceBetween)) {
+            swiperOptions.spaceBetween = this.spaceBetween;
+          }
+        }
+        
+        this._swipeInstance = new Swiper(insertContainer, swiperOptions);
       },
 
       _getRenderMode: function () {
@@ -376,10 +373,6 @@
         }
 
         return result;
-      },
-
-      _isArray: function (obj) {
-        return Object.prototype.toString.call(obj) === "[object Array]";
       }
 
     });
