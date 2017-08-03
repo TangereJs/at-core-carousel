@@ -1,9 +1,9 @@
-<link rel="import" href="../tangere/tangere.html">
-<link rel="import" href="../at-core-view/at-core-view.html">
-<link rel="import" href="../at-carbon-clamp/at-carbon-clamp.html">
-<link rel="import" href="../at-carbon-moment/at-carbon-moment.html">
+<link rel="import" href="../../tangere/tangere.html">
+<link rel="import" href="../../at-core-view/at-core-view.html">
+<link rel="import" href="../../at-carbon-clamp/at-carbon-clamp.html">
+<link rel="import" href="../../at-carbon-moment/at-carbon-moment.html">
 
-<dom-module id="demo-item">
+<dom-module id="bound-item">
 
   <template>
 
@@ -11,8 +11,8 @@
       :host {
         display: block;
         box-sizing: border-box;
-        /*height: 120px;*/
-        /*margin: 0 50px 30px 50px;*/
+
+        border: 1px solid #990000;
       }
 
       .card {
@@ -87,7 +87,7 @@
 
 <script>
   Polymer({
-    is: 'demo-item',
+    is: 'bound-item',
     behaviors: [Tangere.behavior.handleLink],
     properties: {
       item: Object

@@ -167,20 +167,15 @@
         var items = this.items;
         var itemComponent = this.itemComponent;
 
-        // validate input parameters
-        if (!items) {
-          // if items is null or undefined
-          errorCarbonMsg.html = this.T("Data for items not provided.");
-          return;
-        }
-
         if (!itemComponent) {
           errorCarbonMsg.html = this.T("Element name for data rendering not provided.");
           return;
         }
 
-        if (!renderMode) {
-          errorCarbonMsg.html = this.T("Rendering mode not specified.");
+        // validate input parameters
+        if (!items) {
+          // if items is null or undefined
+          errorCarbonMsg.html = this.T("Data for items not provided.");
           return;
         }
 
@@ -189,7 +184,7 @@
         }
 
         // show error if items is an empty array
-        if (this.isArray(items) && items.length === 0) {
+        if (isArray(items) && items.length === 0) {
           errorCarbonMsg.html = this.emptyList;
           return;
         }
@@ -197,31 +192,41 @@
         // clear previously displayed elements
         this.clear();
 
-        // display the available data
+        // check to see if itemComponent has already been imported
+        var found = false;
+        var registrations = Polymer.telemetry.registrations;
+        for (var i = 0; i < registrations.length && !found; i++) {
+          var registration = registrations[i];
+          found = registration.is === itemComponent; 
+        }
 
-        if (!!this.itemComponent) {
+        if (found) {
+          // display the available data
+          this._bindItems(renderMode);
+          return;
+        }
 
-          // dynamically load item-component
+        // dynamically load item-component
 
-          // load item-component from other component (itemComponent = component-name/item-component) or from localfolder (item-component)
-          var compUrl = this.resolveUrl("../");
-          if (window.ComponentsBase != undefined) compUrl = window.ComponentsBase;
+        // load item-component from other component (itemComponent = component-name/item-component) or from localfolder (item-component)
+        var compUrl = this.resolveUrl("../");
+        if (window.ComponentsBase != undefined) compUrl = window.ComponentsBase;
 
-          var compName = this.itemComponent;
-          var importPath = compName.indexOf("/") >= 0 ? compUrl + compName + ".html" : compName + ".html";
+        var compName = this.itemComponent;
+        var importPath = compName.indexOf("/") >= 0 ? compUrl + compName + ".html" : compName + ".html";
 
-          this.importHref(importPath, function () {
+        this.importHref(
+          importPath, 
+          function success() {
             this._bindItems(renderMode);
-          }, function () {
+          },
+          function error() {
             Polymer.signal("busy-end");
             alert(window.location.href + "\n\nERROR: failed to load list item " + this.itemComponent);
             location.hash = ""; // clear current hash
             location.reload(); // go to start app by reloading without hash
-          }, true);
-        } else {
-          // with inline template binding can happen immediately
-          this._bindItems(renderMode);
-        }
+          }, true
+        );
       },
 
       _bindItems: function (renderMode) {
@@ -235,9 +240,7 @@
         var swipeItemPrototype = document.createElement("div");
         Polymer.dom(swipeItemPrototype).classList.add("swiper-slide");
         if (renderMode === "carousel") {
-          // Polymer.dom(swipeItemPrototype).classList.add("carousel-item");
           swipeItemPrototype.style.width = this.cardWidth + 'px';
-        // } else if (renderMode === "swipe") {
         }
 
         // create render element prototype for cloning
@@ -247,50 +250,32 @@
         var insertPoint = this.$.insertPoint;
 
         // iterate through data, clone swipe/render elements and append to insert point
-        for (var i = 0; i < this.items.length; i++) {
-          var renderItemData = this.items[i];
+        this.items.forEach(function(renderItemData){
 
           var swipeItem = swipeItemPrototype.cloneNode(true);
 
           var renderElement = document.createElement(renderElementName);
           renderElement.item = renderItemData;
 
-          if (this.navigationAsOverlay) {
-            renderElement.classList.add('navigation-as-overlay');
+          if (!this.navigationAsOverlay) {
+            if (renderMode === "swipe") {
+              renderElement.classList.add('navigation-as-overlay');
+            } else if (renderMode === "carousel") {
+              this.$.insertContainer.classList.add('swiper-container-no-overlay');
+              this.$.swiperPagination.classList.add('swiper-pagination-no-overlay');
+            }
           }
 
           Polymer.dom(swipeItem).appendChild(renderElement);
           Polymer.dom(insertPoint).appendChild(swipeItem);
-        }
+        }, this);
 
-        var insertContainer = this.$.insertContainer;
         // transform ShadyDom styles of innerHTML
         if (!Polymer.Settings.useShadow) {
-          Polymer.StyleTransformer.dom(insertContainer, this.is, true);
+          Polymer.StyleTransformer.dom(this.$.insertContainer, this.is, true);
         }
 
-        this.indicator = false; // hide indicator before list is rendered
-
-        Polymer.dom.flush();
-
-        if (this._swipeInstance) {
-          this._swipeInstance.kill();
-        }
-        // if (renderMode === "swipe") {
-          var swipeInstance = this._swipeInstance = new Swiper(insertContainer, {
-            slidesPerView: 'auto',
-            // spaceBetween: 50,
-            pagination: this.$.swiperPagination, //'.swiper-pagination',
-            nextButton: this.$.swiperButtonNext, //'.swiper-button-next',
-            prevButton: this.$.swiperButtonPrev, // '.swiper-button-prev',
-              paginationBulletRender: function(s, i, bulletClass) {
-                return '<span class="style-scope at-core-carousel '+ bulletClass +'"></span>';
-              },
-            paginationClickable: true,
-            centeredSlides: this.centeredSlides,
-            // draggable: true
-          });
-        // }
+        this._createSwipeInstance(renderMode);
 
         this.fire("list-ready");
       },
@@ -326,14 +311,17 @@
 
         }, this);
 
-        var insertContainer = this.$.insertContainer;
+        
+        this._createSwipeInstance(renderMode);
+      },
 
+      _createSwipeInstance: function(renderMode) {
         if (this._swipeInstance) {
           this._swipeInstance.destroy();
         }
 
-        var spinner = this.$.spinner;
         var self = this;
+
         var swiperOptions = {
           centeredSlides: this.centeredSlides,
           pagination: this.$.swiperPagination,
@@ -347,15 +335,15 @@
             self.$.spinner.display = 'none';
           }
         };
-        
+
         if (renderMode === "carousel") {
           swiperOptions.slidesPerView = 'auto';
           if (!isNaN(this.spaceBetween)) {
             swiperOptions.spaceBetween = this.spaceBetween;
           }
         }
-        
-        this._swipeInstance = new Swiper(insertContainer, swiperOptions);
+
+        this._swipeInstance = new Swiper(this.$.insertContainer, swiperOptions);
       },
 
       _getRenderMode: function () {
