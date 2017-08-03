@@ -278,6 +278,8 @@
           Polymer.dom(insertPoint).appendChild(swipeItem);
         }, this);
 
+        Polymer.dom.flush();
+
         // transform ShadyDom styles of innerHTML
         if (!Polymer.Settings.useShadow) {
           Polymer.StyleTransformer.dom(this.$.insertContainer, this.is, true);
@@ -319,6 +321,7 @@
 
         }, this);
 
+        Polymer.dom.flush();
         
         this._createSwipeInstance(renderMode);
       },
