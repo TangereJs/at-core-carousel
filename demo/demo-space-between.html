@@ -1,0 +1,227 @@
+<link rel="import" href="../../tangere/tangere.html">
+<link rel="import" href="../../at-core-style-classes/at-core-style-classes.html" />
+<link rel="import" href="../at-core-carousel.html">
+<link rel="import" href="declarative-item.html" />
+
+<dom-module id="demo-space-between">
+  <template>
+    <style include="at-core-style-classes">
+       :host {
+        display: block;
+        box-sizing: border-box;
+      }
+
+      .row {
+        margin: 12px;
+        padding: 12px;
+        border: 1px solid purple;
+      }
+
+      .fixed-width-container {
+        width: 650px;
+        background-color: bisque;
+        margin: 0 24px;
+      }
+
+      .fluid-width-container {
+        background-color: bisque;
+        margin: 0 24px;
+      }
+      
+    </style>
+
+    <div class="row">
+      <div class="font-headline">space-between examples</div>
+      <div class="font-subhead">Items and data are rendered as specified declaratively.</div>
+    </div>
+
+    <div class="row">
+      <h3 class="font-title">Demo 1</h3>
+      <ul class="font-body1">
+        <li>Carousel is inside fixed width container (650px).</li>
+        <li>Carousel has card-width="450". This sets renderMode to carousel and each carousel item has width of 450px</li>
+        <li>navigation-as-overlay attribute is false. Navigation arrows and pagination will not overlay carousel items</li>
+        <li>Spacebetween set to 50</li>
+      </ul>
+
+      <h3 class="font-title">Preview</h3>
+      <div class="fixed-width-container">
+        <at-core-carousel mode="static" card-width="450" space-between="50">
+          <declarative-item title="Item 1"></declarative-item>
+          <declarative-item title="Item 2"></declarative-item>
+          <declarative-item title="Item 3"></declarative-item>
+          <declarative-item title="Item 4"></declarative-item>
+          <declarative-item title="Item 5"></declarative-item>
+          <declarative-item title="Item 6"></declarative-item>
+        </at-core-carousel>
+      </div>
+    </div>
+
+    <div class="row">
+      <h3 class="font-title">Demo 2</h3>
+      <ul class="font-body1">
+        <li>Carousel is inside fixed width container (650px).</li>
+        <li>Carousel has card-width="450". This sets renderMode to carousel and each carousel item has width of 450px</li>
+        <li>navigation-as-overlay attribute is true. Navigation arrows and pagination will overlay carousel items</li>
+        <li>Spacebetween set to 50</li>
+      </ul>
+
+      <h3 class="font-title">Preview</h3>
+      <div class="fixed-width-container">
+        <at-core-carousel mode="static" card-width="450" navigation-as-overlay space-between="50">
+          <declarative-item title="Item 1"></declarative-item>
+          <declarative-item title="Item 2"></declarative-item>
+          <declarative-item title="Item 3"></declarative-item>
+          <declarative-item title="Item 4"></declarative-item>
+          <declarative-item title="Item 5"></declarative-item>
+          <declarative-item title="Item 6"></declarative-item>
+        </at-core-carousel>
+      </div>
+    </div>
+
+    <div class="row">
+      <h3 class="font-title">Demo 3</h3>
+      <ul class="font-body1">
+        <li>Carousel is inside fluid width container (100%).</li>
+        <li>Carousel has card-width="450". This sets renderMode to carousel and each carousel item has width of 450px</li>
+        <li>navigation-as-overlay attribute is false. Navigation arrows and pagination will not overlay carousel items</li>
+        <li>Spacebetween set to 50</li>
+      </ul>
+
+      <h3 class="font-title">Preview</h3>
+      <div class="fluid-width-container">
+        <at-core-carousel mode="static" card-width="450" space-between="50">
+          <declarative-item title="Item 1"></declarative-item>
+          <declarative-item title="Item 2"></declarative-item>
+          <declarative-item title="Item 3"></declarative-item>
+          <declarative-item title="Item 4"></declarative-item>
+          <declarative-item title="Item 5"></declarative-item>
+          <declarative-item title="Item 6"></declarative-item>
+        </at-core-carousel>
+      </div>
+    </div>
+
+    <div class="row">
+      <h3 class="font-title">Demo 4</h3>
+      <ul class="font-body1">
+        <li>Carousel is inside fluid width container (100%).</li>
+        <li>Carousel has card-width="450". This sets renderMode to carousel and each carousel item has width of 450px</li>
+        <li>navigation-as-overlay attribute is true. Navigation arrows and pagination will overlay carousel items</li>
+        <li>Spacebetween set to 50</li>
+      </ul>
+
+      <h3 class="font-title">Preview</h3>
+      <div class="fluid-width-container">
+        <at-core-carousel mode="static" card-width="450" navigation-as-overlay space-between="50">
+          <declarative-item title="Item 1"></declarative-item>
+          <declarative-item title="Item 2"></declarative-item>
+          <declarative-item title="Item 3"></declarative-item>
+          <declarative-item title="Item 4"></declarative-item>
+          <declarative-item title="Item 5"></declarative-item>
+          <declarative-item title="Item 6"></declarative-item>
+        </at-core-carousel>
+      </div>
+    </div>    
+
+    <div class="row">
+      <div class="font-headline">centered slides examples</div>
+      <div class="font-subhead">Items and data are rendered as specified declaratively.</div>
+    </div>
+
+    <div class="row">
+      <h3 class="font-title">Demo 1</h3>
+      <ul class="font-body1">
+        <li>Carousel is inside fixed width container (650px).</li>
+        <li>Carousel has card-width="450". This sets renderMode to carousel and each carousel item has width of 450px</li>
+        <li>navigation-as-overlay attribute is false. Navigation arrows and pagination will not overlay carousel items</li>
+        <li>Spacebetween set to 50</li>
+      </ul>
+
+      <h3 class="font-title">Preview</h3>
+      <div class="fixed-width-container">
+        <at-core-carousel mode="static" card-width="450" space-between="50" centered-slides>
+          <declarative-item title="Item 1"></declarative-item>
+          <declarative-item title="Item 2"></declarative-item>
+          <declarative-item title="Item 3"></declarative-item>
+          <declarative-item title="Item 4"></declarative-item>
+          <declarative-item title="Item 5"></declarative-item>
+          <declarative-item title="Item 6"></declarative-item>
+        </at-core-carousel>
+      </div>
+    </div>
+
+    <div class="row">
+      <h3 class="font-title">Demo 2</h3>
+      <ul class="font-body1">
+        <li>Carousel is inside fixed width container (650px).</li>
+        <li>Carousel has card-width="450". This sets renderMode to carousel and each carousel item has width of 450px</li>
+        <li>navigation-as-overlay attribute is true. Navigation arrows and pagination will overlay carousel items</li>
+        <li>Spacebetween set to 50</li>
+      </ul>
+
+      <h3 class="font-title">Preview</h3>
+      <div class="fixed-width-container">
+        <at-core-carousel mode="static" card-width="450" navigation-as-overlay space-between="50" centered-slides>
+          <declarative-item title="Item 1"></declarative-item>
+          <declarative-item title="Item 2"></declarative-item>
+          <declarative-item title="Item 3"></declarative-item>
+          <declarative-item title="Item 4"></declarative-item>
+          <declarative-item title="Item 5"></declarative-item>
+          <declarative-item title="Item 6"></declarative-item>
+        </at-core-carousel>
+      </div>
+    </div>
+
+    <div class="row">
+      <h3 class="font-title">Demo 3</h3>
+      <ul class="font-body1">
+        <li>Carousel is inside fluid width container (100%).</li>
+        <li>Carousel has card-width="450". This sets renderMode to carousel and each carousel item has width of 450px</li>
+        <li>navigation-as-overlay attribute is false. Navigation arrows and pagination will not overlay carousel items</li>
+        <li>Spacebetween set to 50</li>
+      </ul>
+
+      <h3 class="font-title">Preview</h3>
+      <div class="fluid-width-container">
+        <at-core-carousel mode="static" card-width="450" space-between="50" centered-slides>
+          <declarative-item title="Item 1"></declarative-item>
+          <declarative-item title="Item 2"></declarative-item>
+          <declarative-item title="Item 3"></declarative-item>
+          <declarative-item title="Item 4"></declarative-item>
+          <declarative-item title="Item 5"></declarative-item>
+          <declarative-item title="Item 6"></declarative-item>
+        </at-core-carousel>
+      </div>
+    </div>
+
+    <div class="row">
+      <h3 class="font-title">Demo 4</h3>
+      <ul class="font-body1">
+        <li>Carousel is inside fluid width container (100%).</li>
+        <li>Carousel has card-width="450". This sets renderMode to carousel and each carousel item has width of 450px</li>
+        <li>navigation-as-overlay attribute is true. Navigation arrows and pagination will overlay carousel items</li>
+        <li>Spacebetween set to 50</li>
+      </ul>
+
+      <h3 class="font-title">Preview</h3>
+      <div class="fluid-width-container">
+        <at-core-carousel mode="static" card-width="450" navigation-as-overlay space-between="50" centered-slides>
+          <declarative-item title="Item 1"></declarative-item>
+          <declarative-item title="Item 2"></declarative-item>
+          <declarative-item title="Item 3"></declarative-item>
+          <declarative-item title="Item 4"></declarative-item>
+          <declarative-item title="Item 5"></declarative-item>
+          <declarative-item title="Item 6"></declarative-item>
+        </at-core-carousel>
+      </div>
+    </div> 
+
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'demo-space-between'
+  });
+
+</script>
