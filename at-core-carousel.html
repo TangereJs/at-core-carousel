@@ -3,8 +3,7 @@
 <link rel="import" href="../at-i18n/at-i18n-behavior.html">
 <link rel="import" href="../at-core-spinner/at-core-spinner.html" />
 <link rel="import" href="../at-carbon-message/at-carbon-message.html" />
-
-
+<link rel="import" href="../at-carbon-icon-color/at-carbon-icon-color.html" />
 <link rel="import" href="lib/swiper-styles.html" />
 <link rel="import" href="swipe-import.html">
 
@@ -43,6 +42,12 @@
       .navigation-as-overlay {
         margin: 0 50px 30px 50px;
       }      
+
+      .button-icon {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
     </style>
 
     <at-core-spinner id="spinner" type="wave"></at-core-spinner>
@@ -55,9 +60,12 @@
       <div id="swiperPagination" class="swiper-pagination"></div>
     </div>
     
-    <div id="swiperButtonNext" class="swiper-button-next"></div>
-    <div id="swiperButtonPrev" class="swiper-button-prev"></div>
-      
+    <div id="swiperButtonPrev" class="swiper-button-prev">
+      <at-carbon-icon-color icon="now:caret-left" class="button-icon" color="blue"></at-carbon-icon-color>
+    </div>
+    <div id="swiperButtonNext" class="swiper-button-next">
+      <at-carbon-icon-color icon="now:caret-right" class="button-icon" color="blue"></at-carbon-icon-color>
+    </div>      
 
     <div id="staticItems" hidden>
       <content id="contentInsertPoint" select="*"></content>
