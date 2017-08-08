@@ -17,6 +17,10 @@
         position: relative;
       }
 
+      .swiper-slide {
+        overflow: hidden;
+      }
+
       .swiper-container-no-overlay {
         margin: 0 50px;
       }
@@ -53,10 +57,10 @@
       <div id="swiperPagination" class="swiper-pagination"></div>
     </div>
     
-    <div id="swiperButtonPrev" class="swiper-button-prev">
+    <div id="swiperButtonPrev" class="swiper-button-prev" hidden>
       <at-carbon-icon-color icon="now:caret-left" class="button-icon" color="blue"></at-carbon-icon-color>
     </div>
-    <div id="swiperButtonNext" class="swiper-button-next">
+    <div id="swiperButtonNext" class="swiper-button-next" hidden>
       <at-carbon-icon-color icon="now:caret-right" class="button-icon" color="blue"></at-carbon-icon-color>
     </div>      
 
@@ -186,6 +190,7 @@
 
         // show error if items is an empty array
         if (isArray(items) && items.length === 0) {
+          this.$.spinner.display = "none";
           errorCarbonMsg.html = this.emptyList;
           return;
         }
@@ -337,6 +342,8 @@
           paginationClickable: true,
           onInit: function() {
             self.$.spinner.display = 'none';
+            self.$.swiperButtonPrev.removeAttribute('hidden');
+            self.$.swiperButtonNext.removeAttribute('hidden');
           }
         };
 

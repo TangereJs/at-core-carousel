@@ -17,12 +17,12 @@
     </style>
   
     <h2>API bound carousel demo</h2>
-    <h4>Note that new swiper branch is not yet merged so new carousel behavior is not present here.</h4>
-    
+
     <at-core-activity
       auto
       url="/api/adenin.Gatekeeper.Content/role"
       on-response="_handleRolesResponse"
+      on-error="_handleRolesError"
     ></at-core-activity>
 
     <at-core-carousel
@@ -30,6 +30,7 @@
       mode="bound"
       items="[[_boundItems]]"
       item-component="bound-item"
+      card-width="440"
     ></at-core-carousel>
 
   </template>
@@ -53,6 +54,11 @@
 
       this._boundItems = null;
       this._boundItems = items;
+    },
+
+    _handleRolesError: function(event) {
+      this._boundItems = null;
+      this._boundItems = [];
     }
   });
 </script>
