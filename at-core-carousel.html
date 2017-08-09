@@ -17,6 +17,7 @@
         display: block;
         box-sizing: border-box;
         position: relative;
+        min-height: 50px;
       }
 
       .swiper-slide {
@@ -160,6 +161,13 @@
       observers: [
         'initialize(items.*, itemComponent, cardWidth, emptyList)'
       ],
+
+      $meta: [{
+        title: "Carousel",
+        type: "at-core-carousel",
+        events: [],
+        icon: "now:wrench"
+      }],
 
       _computeLinkHidden: function(maxItems) {
         return maxItems === 0;
@@ -351,6 +359,14 @@
 
       _initializeStaticDataSource: function (renderMode) {
 
+        var children = this.getEffectiveChildren();
+        
+        if (!children.length) {
+          this.$.spinner.display = 'none';
+          this.$.msgEmptyList.html = this.T("Data for items not provided.");
+          return;
+        }
+
         var insertPoint = Polymer.dom(this.$.insertPoint);
 
         var swiperSlidePrototype = document.createElement('div');
@@ -359,8 +375,6 @@
           swiperSlidePrototype.style.width = this.cardWidth + 'px';
         }
 
-        var children = this.getEffectiveChildren();
-        
         // iterate through data, clone swipe/render elements and append to insert point
         var itemsToRender = children;
         // if maxItems is set, limit rendered items to maxItems
