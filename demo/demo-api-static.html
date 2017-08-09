@@ -1,0 +1,63 @@
+<link rel="import" href="../../tangere/tangere.html" />
+<link rel="import" href="../../at-core-activity/at-core-activity.html" />
+<link rel="import" href="../at-core-carousel.html" />
+
+<dom-module id="demo-api-static">
+  <template>
+    <style>
+      :host {
+        display: block;
+        box-sizing: border-box;
+      }
+
+      .demo-carousel {
+        margin: 4px;
+        padding: 4px;
+      }
+    </style>
+  
+    <h2>API static carousel demo</h2>
+
+    <at-core-carousel
+      class="demo-carousel"
+      mode="bound"
+      items="[[_boundItems]]"
+      item-component="bound-item"
+      card-width="440"
+      max-items="4"
+    ></at-core-carousel>
+
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: "demo-api-static",
+    properties: {
+      _boundItems: {
+        type: Array,
+        value: function() {
+          return [];
+        }
+      }
+    },
+    ready: function () {
+      var items = [];
+
+      var age = new Date();
+      var item = {};
+      for (var i = 0; i < 10; i++) {
+        age.setMinutes(age.getMinutes() - i + 10);
+        item = {
+          link: "http://www.google.com",
+          title: (i+1) + " - Yay! A title.",
+          description: (i+1) + " - Rejoice! A description.",
+          date: age.toISOString()
+        };
+        items.push(item);
+      }
+
+      this._boundItems = null;
+      this._boundItems = items;
+    },
+  });
+</script>
