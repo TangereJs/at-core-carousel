@@ -4,6 +4,8 @@
 <link rel="import" href="../at-core-spinner/at-core-spinner.html" />
 <link rel="import" href="../at-carbon-message/at-carbon-message.html" />
 <link rel="import" href="../at-carbon-icon-color/at-carbon-icon-color.html" />
+<link rel="import" href="../at-link/at-link.html" />
+
 <link rel="import" href="lib/swiper-styles.html" />
 <link rel="import" href="swipe-import.html">
 
@@ -45,11 +47,26 @@
         height: 100%;
         display: block;
       }
+
+      .link-container {
+        @apply(--layout-horizontal);
+        @apply(--layout-end-justified);
+        margin: 0 50px 8px 0;
+      }
+
+      .more-link {
+        display: block;
+        @apply(--at-form-label-font);
+      }
     </style>
 
     <at-core-spinner id="spinner" type="wave"></at-core-spinner>
     
     <at-carbon-message id="msgEmptyList" type="info"></at-carbon-message>
+
+    <div class="link-container">
+      <at-link id="moreLink" class="more-link" href="[[moreUrl]]" hidden$="[[_computeLinkHidden(maxItems)]]"></at-link>
+    </div>
 
     <div id="insertContainer" class="swiper-container">
       <div id="insertPoint" class="swiper-wrapper"></div>
@@ -119,12 +136,50 @@
         spaceBetween: {
           type: Number,
           value: 0
+        },
+
+        maxItems: {
+          type: Number,
+          value: 0
+        },
+
+        moreUrl: {
+          type: String,
+          value: '',
+          observer: '_moreUrlChanged'
+        },
+
+        moreTitle: {
+          type: String,
+          valuel: '',
+          observer: '_moreTitleChanged'
         }
+
       },
 
       observers: [
         'initialize(items.*, itemComponent, cardWidth, emptyList)'
       ],
+
+      _computeLinkHidden: function(maxItems) {
+        return maxItems === 0;
+      },
+
+      // There is a bug in polymer-js where compound observers are not triggered if all properties are not set on element as attributes
+      // example: _computeLinkTitle(moreUrl, moreTitle) specified in html template or observers array
+      // will not be triggered for <at-core-carousel></at-core-carousel>
+      // will be triggered for <at-core-carousel more-title="A title"></at-core-carousel>
+      // will not be triggered for <at-core-carousel more-url="A url"></at-core-carousel> (this is the BUG)
+      // will be triggered for <at-core-carousel more-title="A title" more-url="A url"></at-core-carousel>
+      // Separate observer functions are used instead. THANK YOU polymer-js!
+      _moreUrlChanged: function(newValue, oldValue) {
+        if (this.moreTitle) return;
+        Polymer.dom(this.$.moreLink).textContent = newValue;
+      },
+
+      _moreTitleChanged: function(newValue, oldValue) {
+        Polymer.dom(this.$.moreLink).textContent = newValue;
+      },
 
       attached: function() {
         this.isAttached = true;
@@ -256,7 +311,13 @@
         var insertPoint = this.$.insertPoint;
 
         // iterate through data, clone swipe/render elements and append to insert point
-        this.items.forEach(function(renderItemData){
+        var itemsToRender = this.items;
+        // if maxItems is set, limit rendered items to maxItems
+        if (this.maxItems > 0) {
+          itemsToRender = this.items.slice(0, this.maxItems);
+        }
+
+        itemsToRender.forEach(function(renderItemData){
 
           var swipeItem = swipeItemPrototype.cloneNode(true);
 
@@ -300,7 +361,14 @@
 
         var children = this.getEffectiveChildren();
         
-        Array.prototype.forEach.call(children, function(child, index){ 
+        // iterate through data, clone swipe/render elements and append to insert point
+        var itemsToRender = children;
+        // if maxItems is set, limit rendered items to maxItems
+        if (this.maxItems > 0) {
+          itemsToRender = Array.prototype.slice.call(children, 0, this.maxItems);
+        }
+
+        Array.prototype.forEach.call(itemsToRender, function(child, index){ 
           
           child.parentElement.removeChild(child);          
 
