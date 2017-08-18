@@ -41,7 +41,7 @@
 
       .navigation-as-overlay {
         margin: 0 50px 30px 50px;
-      }      
+      }
 
       .button-icon {
         width: 100%;
@@ -154,6 +154,11 @@
           type: String,
           valuel: '',
           observer: '_moreTitleChanged'
+        },
+
+        modelRoot: {
+          type: String,
+          value: ""
         }
 
       },
@@ -187,6 +192,31 @@
 
       _moreTitleChanged: function(newValue, oldValue) {
         Polymer.dom(this.$.moreLink).textContent = newValue;
+      },
+
+      actionListener: function (event) {
+
+        var _model = this.modelRoot ? event.detail.model : event.detail.model.state;
+        if (this.modelRoot) _model = this._getObjPath(_model, this.modelRoot);
+
+        if (_model && !!_model.items) this.items = _model.items;
+
+      },
+
+      _getObjPath: function (obj, path) {
+
+        if (!path) return obj;
+        var paths = path.split('.'),
+          current = obj;
+
+        for (var i = 0; i < paths.length; ++i) {
+          if (current[paths[i]] == undefined) {
+            return undefined;
+          } else {
+            current = current[paths[i]];
+          }
+        }
+        return current;
       },
 
       attached: function() {
@@ -277,6 +307,24 @@
 
         // dynamically load item-component
 
+        // expand relative name with name prefix
+        var elName = this.itemComponent;
+        if (elName.indexOf(".card") > 0) {
+     
+          var elNameOrg = elName;
+          var resolve = { namePrefix: "" };
+
+          this.fire("resolve-name-prefix", resolve);
+          var prefix = resolve.namePrefix;
+
+          if (elName == "default.card") elName = "";
+          elName = elName.replace("default.", "");
+
+          elName = prefix + "/" + prefix + (elName ? ("-" + elName.replace(".", "-")) : "");
+
+          this.itemComponent = elName;
+        }
+
         // load item-component from other component (itemComponent = component-name/item-component) or from localfolder (item-component)
         var compUrl = this.resolveUrl("../");
         if (window.ComponentsBase != undefined) compUrl = window.ComponentsBase;
@@ -330,7 +378,13 @@
           var swipeItem = swipeItemPrototype.cloneNode(true);
 
           var renderElement = document.createElement(renderElementName);
-          renderElement.item = renderItemData;
+
+          if (renderElement.properties.model != undefined) {
+            // designer cards use .model for binding           
+            renderElement.model = renderItemData;
+          } else {
+            renderElement.item = renderItemData;
+          }
 
           if (!this.navigationAsOverlay) {
             if (renderMode === "swipe") {
