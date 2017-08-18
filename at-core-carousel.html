@@ -233,6 +233,7 @@
         while(insertPoint.firstChild) {
           insertPoint.removeChild(insertPoint.firstChild);
         }
+        Polymer.dom(this.$.swiperPagination).innerHTML = '';
 
         Polymer.dom.flush();
       },
@@ -249,9 +250,6 @@
 
         // if swiper instance exists; destroy it
         if (this._swipeInstance) {
-          Polymer.dom(this.$.insertPoint).innerHTML = '';
-          Polymer.dom(this.$.swiperPagination).innerHTML = '';
-
           this._swipeInstance.destroy(true);
           this._swipeInstance = undefined;
         }
@@ -300,9 +298,6 @@
           errorCarbonMsg.html = this.emptyList;
           return;
         }
-
-        // clear previously displayed elements
-        this.clear();
 
         // check to see if itemComponent has already been imported
         var found = false;
@@ -360,6 +355,9 @@
       },
 
       _bindItems: function (renderMode) {
+        // clear previously displayed elements
+        this.clear();
+
         // get correct renderElementName
         var renderElementName = this.itemComponent;
         if (renderElementName.indexOf("/") > 0) {
