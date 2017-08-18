@@ -66,7 +66,7 @@
     <at-carbon-message id="msgEmptyList" type="info"></at-carbon-message>
 
     <div class="link-container">
-      <at-link id="moreLink" class="more-link" href="[[moreUrl]]" hidden$="[[_computeLinkHidden(maxItems)]]"></at-link>
+      <at-link id="moreLink" class="more-link" href="[[moreUrl]]" hidden$="[[_computeLinkHidden(items, maxItems)]]"></at-link>
     </div>
 
     <div id="insertContainer" class="swiper-container">
@@ -174,8 +174,8 @@
         icon: "now:wrench"
       }],
 
-      _computeLinkHidden: function(maxItems) {
-        return maxItems === 0;
+      _computeLinkHidden: function(items, maxItems) {
+        return items.length <= maxItems;
       },
 
       // There is a bug in polymer-js where compound observers are not triggered if all properties are not set on element as attributes
