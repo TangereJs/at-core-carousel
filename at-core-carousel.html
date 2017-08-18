@@ -243,6 +243,19 @@
         // clear previous error message
         this.$.msgEmptyList.html = "";
 
+        // hide the buttons 
+        this.$.swiperButtonPrev.setAttribute('hidden', true);
+        this.$.swiperButtonNext.setAttribute('hidden', true);
+
+        // if swiper instance exists; destroy it
+        if (this._swipeInstance) {
+          Polymer.dom(this.$.insertPoint).innerHTML = '';
+          Polymer.dom(this.$.swiperPagination).innerHTML = '';
+
+          this._swipeInstance.destroy(true);
+          this._swipeInstance = undefined;
+        }
+
         var renderMode = this._getRenderMode();
 
         // check mode and initialize correct data source
@@ -406,7 +419,7 @@
           Polymer.StyleTransformer.dom(this.$.insertContainer, this.is, true);
         }
 
-        this._createSwipeInstance(renderMode);
+        this._createSwipeInstance(renderMode, this.items.length);
 
         this.fire("list-ready");
       },
@@ -457,10 +470,10 @@
 
         Polymer.dom.flush();
         
-        this._createSwipeInstance(renderMode);
+        this._createSwipeInstance(renderMode, children.length);
       },
 
-      _createSwipeInstance: function(renderMode) {
+      _createSwipeInstance: function(renderMode, itemCount) {
         if (this._swipeInstance) {
           this._swipeInstance.destroy();
         }
@@ -478,8 +491,12 @@
           paginationClickable: true,
           onInit: function() {
             self.$.spinner.display = 'none';
-            self.$.swiperButtonPrev.removeAttribute('hidden');
-            self.$.swiperButtonNext.removeAttribute('hidden');
+            if (itemCount > 1) {
+              self.$.swiperButtonPrev.removeAttribute('hidden');
+              self.$.swiperButtonNext.removeAttribute('hidden');
+            } else {
+              Polymer.dom(self.$.swiperPagination).innerHTML = '';
+            }
           }
         };
 
