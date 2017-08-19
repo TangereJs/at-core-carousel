@@ -199,7 +199,11 @@
         var _model = this.modelRoot ? event.detail.model : event.detail.model.state;
         if (this.modelRoot) _model = this._getObjPath(_model, this.modelRoot);
 
-        if (_model && !!_model.items) this.items = _model.items;
+        if (_model) { 
+          if(_model.items) this.items = _model.items;
+          if(_model.moreUrl) this.moreUrl = _model.moreUrl;
+          if(_model.moreTitle) this.moreTitle = _model.moreTitle;
+        }
 
       },
 
@@ -392,7 +396,8 @@
 
           if (renderElement.properties.model != undefined) {
             // designer cards use .model for binding           
-            renderElement.model = renderItemData;
+            renderElement.model = { items: [renderItemData], item: renderItemData }; // we unfortunately currently have two conventions for isolated cards items[] with one entry AND item
+
           } else {
             renderElement.item = renderItemData;
           }
