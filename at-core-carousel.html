@@ -5,6 +5,7 @@
 <link rel="import" href="../at-carbon-message/at-carbon-message.html" />
 <link rel="import" href="../at-carbon-icon-color/at-carbon-icon-color.html" />
 <link rel="import" href="../at-link/at-link.html" />
+<link rel="import" href="../at-core-card/at-core-card.html" />
 
 <link rel="import" href="lib/swiper-styles.html" />
 <link rel="import" href="swipe-import.html">
@@ -59,6 +60,21 @@
         display: block;
         @apply(--at-form-label-font);
       }
+
+      at-core-card {
+        box-shadow: 0 1px 2px #aaa;
+        box-shadow: rgba(0, 0, 0, 0.098) 0px 2px 4px, rgba(0, 0, 0, 0.1) 0px 0px 3px;
+        background: white;
+        margin: 15px;
+        border-radius: 3px;
+        overflow: hidden;
+        user-select: none;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
     </style>
 
     <at-core-spinner id="spinner" type="wave"></at-core-spinner>
@@ -104,6 +120,11 @@
           type: String,
           value: "",
           notify: true
+        },
+
+        itemCardWrapper: {
+          type: Boolean,
+          value: false
         },
 
         cardWidth: {
@@ -204,6 +225,8 @@
           if(_model.moreUrl) this.moreUrl = _model.moreUrl;
           if(_model.moreTitle) this.moreTitle = _model.moreTitle;
         }
+
+        this.model = _model;
 
       },
 
@@ -394,12 +417,27 @@
 
           var renderElement = document.createElement(renderElementName);
 
+
+
           if (renderElement.properties.model != undefined) {
-            // designer cards use .model for binding           
-            renderElement.model = { items: [renderItemData], item: renderItemData }; // we unfortunately currently have two conventions for isolated cards items[] with one entry AND item
+            // designer cards use .model for binding  
+            var dm = { items: [renderItemData], item: renderItemData }; // we unfortunately currently have two conventions for isolated cards items[] with one entry AND item
+            
+            if (this.model) {
+              dm._card = this.model._card;
+              dm._container = this.model._container;
+            }
+
+            renderElement.model = dm;
 
           } else {
             renderElement.item = renderItemData;
+          }
+
+          if (this.itemCardWrapper) {
+            var wrapper = document.createElement("at-core-card");
+            Polymer.dom(wrapper).appendChild(renderElement);
+            renderElement = wrapper;
           }
 
           if (!this.navigationAsOverlay) {
