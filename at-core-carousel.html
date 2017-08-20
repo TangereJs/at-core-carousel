@@ -6,6 +6,7 @@
 <link rel="import" href="../at-carbon-icon-color/at-carbon-icon-color.html" />
 <link rel="import" href="../at-link/at-link.html" />
 <link rel="import" href="../at-core-card/at-core-card.html" />
+<link rel="import" href="../at-core-style-classes/at-core-style-classes.html" />
 
 <link rel="import" href="lib/swiper-styles.html" />
 <link rel="import" href="swipe-import.html">
@@ -13,6 +14,7 @@
 
 <dom-module id="at-core-carousel">
   <template>
+    <style include="at-core-style-classes"></style> 
     <style include="swiper-styles">
       :host {
         display: block;
@@ -56,11 +58,6 @@
         margin: 0 50px 8px 0;
       }
 
-      .more-link {
-        display: block;
-        @apply(--at-form-label-font);
-      }
-
       at-core-card {
         box-shadow: 0 1px 2px #aaa;
         box-shadow: rgba(0, 0, 0, 0.098) 0px 2px 4px, rgba(0, 0, 0, 0.1) 0px 0px 3px;
@@ -82,7 +79,7 @@
     <at-carbon-message id="msgEmptyList" type="info"></at-carbon-message>
 
     <div class="link-container">
-      <at-link id="moreLink" class="more-link" href="[[moreUrl]]" hidden$="[[_computeLinkHidden(items, maxItems)]]"></at-link>
+      <at-link id="moreLink" class="block font-body1 action" href="[[moreUrl]]" hidden$="[[_computeLinkHidden(items, maxItems)]]"></at-link>
     </div>
 
     <div id="insertContainer" class="swiper-container">
