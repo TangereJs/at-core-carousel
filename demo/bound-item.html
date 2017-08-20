@@ -1,9 +1,10 @@
-<link rel="import" href="../tangere/tangere.html">
-<link rel="import" href="../at-core-view/at-core-view.html">
-<link rel="import" href="../at-carbon-clamp/at-carbon-clamp.html">
-<link rel="import" href="../at-carbon-moment/at-carbon-moment.html">
+<link rel="import" href="../../tangere/tangere.html">
+<link rel="import" href="../../at-theme/at-theme.html" />
+<link rel="import" href="../../at-core-view/at-core-view.html">
+<link rel="import" href="../../at-carbon-clamp/at-carbon-clamp.html">
+<link rel="import" href="../../at-carbon-moment/at-carbon-moment.html">
 
-<dom-module id="demo-item">
+<dom-module id="bound-item">
 
   <template>
 
@@ -11,7 +12,8 @@
       :host {
         display: block;
         box-sizing: border-box;
-        height: 120px;
+
+        height: 560px;
       }
 
       .card {
@@ -19,10 +21,12 @@
       }
 
       .container {
+        box-sizing: border-box;
         padding: 8px;
+        height: 100%;
       }
 
-      .containerx:active {
+      .container:active {
         background-color: var(--at-active-background-color);
         transition: all 0.1s ease;
       }
@@ -34,11 +38,12 @@
 
 
       .item {
+        box-sizing: border-box;
         @apply(--layout-horizontal);
         @apply(--shadow-elevation-2dp);
-        color: var(--primary-text-color);        
-        height: 72px;
-          background-color:white;
+        color: var(--primary-text-color);
+        background-color:white;
+        height: 100%;
       }
 
       .title {
@@ -86,7 +91,7 @@
 
 <script>
   Polymer({
-    is: 'demo-item',
+    is: 'bound-item',
     behaviors: [Tangere.behavior.handleLink],
     properties: {
       item: Object

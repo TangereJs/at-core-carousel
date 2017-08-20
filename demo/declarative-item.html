@@ -1,0 +1,31 @@
+<link rel="import" href="../../tangere/tangere.html" />
+<link rel="import" href="../../at-core-style-classes/at-core-style-classes.html" />
+
+<dom-module id="declarative-item">
+  <template>
+    <style include="at-core-style-classes">
+       :host {
+        display: block;
+        box-sizing: border-box;
+      }
+
+    </style>
+
+    <div class="font-headline">[[title]]</div>
+    <div class="font-subhead">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor</div>
+
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: "declarative-item",
+    properties: {
+      title: {
+        type: String,
+        value: "Please, set me"
+      }
+    },
+    ready: function() {}
+  });
+
+</script>

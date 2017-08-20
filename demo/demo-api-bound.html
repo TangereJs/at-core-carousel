@@ -1,0 +1,65 @@
+<link rel="import" href="../../tangere/tangere.html" />
+<link rel="import" href="../../at-core-activity/at-core-activity.html" />
+<link rel="import" href="../at-core-carousel.html" />
+
+<dom-module id="demo-api-bound">
+  <template>
+    <style>
+      :host {
+        display: block;
+        box-sizing: border-box;
+      }
+
+      .demo-carousel {
+        margin: 4px;
+        padding: 4px;
+      }
+    </style>
+  
+    <h2>API bound carousel demo</h2>
+
+    <at-core-activity
+      auto
+      url="/api/adenin.Gatekeeper.Content/role"
+      on-response="_handleRolesResponse"
+      on-error="_handleRolesError"
+    ></at-core-activity>
+
+    <at-core-carousel
+      class="demo-carousel"
+      mode="bound"
+      items="[[_boundItems]]"
+      item-component="bound-item"
+      card-width="440"
+      max-items="4"
+    ></at-core-carousel>
+
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: "demo-api-bound",
+    properties: {
+      _boundItems: {
+        type: Array,
+        value: function() {
+          return [];
+        }
+      }
+    },
+    ready: function () {
+
+    },
+    _handleRolesResponse: function(event) {
+      var items = event.detail.Data.items;
+
+      this._boundItems = null;
+      this._boundItems = items;
+    },
+
+    _handleRolesError: function(event) {
+      this._boundItems = null;
+      this._boundItems = [];
+    }
+  });
+</script>

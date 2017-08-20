@@ -1,0 +1,157 @@
+<link rel="import" href="../../tangere/tangere.html" />
+<link rel="import" href="../../at-theme/at-theme.html" />
+<link rel="import" href="../../at-core-style-classes/at-core-style-classes.html" />
+<link rel="import" href="../at-core-carousel.html" />
+<link rel="import" href="declarative-item.html" />
+
+<dom-module id="demo-max-items">
+  <template>
+    <style include="at-core-style-classes">
+       :host {
+        display: block;
+        box-sizing: border-box;
+      }
+
+      .demo-container {
+        margin-top: 32px;
+      }
+
+      declarative-item {
+        background-color: bisque;
+        margin: 0 4px;
+      }
+    </style>
+
+    <div class="demo-container">
+      <h4 class="font-headline">max-items 0 (no limit), no moreUrl no moreTitle</h4>
+      <at-core-carousel>
+        <declarative-item title="Item 1"></declarative-item>
+        <declarative-item title="Item 2"></declarative-item>
+        <declarative-item title="Item 3"></declarative-item>
+        <declarative-item title="Item 4"></declarative-item>
+        <declarative-item title="Item 5"></declarative-item>
+        <declarative-item title="Item 6"></declarative-item>
+        <declarative-item title="Item 7"></declarative-item>
+        <declarative-item title="Item 8"></declarative-item>
+        <declarative-item title="Item 9"></declarative-item>
+      </at-core-carousel>
+    </div>
+
+    <div class="demo-container">
+      <h4 class="font-headline">max-items 0 (no limit), no moreUrl, moreTitle = "Yay! A title"</h4>
+      <at-core-carousel more-title="Yay! A title">
+        <declarative-item title="Item 1"></declarative-item>
+        <declarative-item title="Item 2"></declarative-item>
+        <declarative-item title="Item 3"></declarative-item>
+        <declarative-item title="Item 4"></declarative-item>
+        <declarative-item title="Item 5"></declarative-item>
+        <declarative-item title="Item 6"></declarative-item>
+        <declarative-item title="Item 7"></declarative-item>
+        <declarative-item title="Item 8"></declarative-item>
+        <declarative-item title="Item 9"></declarative-item>
+      </at-core-carousel>
+    </div>
+
+    <div class="demo-container">
+      <h4 class="font-headline">max-items 0 (no limit), moreUrl="http://www.google.com", moreTitle=""</h4>
+      <at-core-carousel more-url="http://www.google.com">
+        <declarative-item title="Item 1"></declarative-item>
+        <declarative-item title="Item 2"></declarative-item>
+        <declarative-item title="Item 3"></declarative-item>
+        <declarative-item title="Item 4"></declarative-item>
+        <declarative-item title="Item 5"></declarative-item>
+        <declarative-item title="Item 6"></declarative-item>
+        <declarative-item title="Item 7"></declarative-item>
+        <declarative-item title="Item 8"></declarative-item>
+        <declarative-item title="Item 9"></declarative-item>
+      </at-core-carousel>
+    </div>
+
+    <div class="demo-container">
+      <h4 class="font-headline">max-items 0 (no limit), moreUrl="http://www.google.com", moreTitle = "Yay! A title"</h4>
+      <at-core-carousel more-url="http://www.google.com" more-title="Yay! A title">
+        <declarative-item title="Item 1"></declarative-item>
+        <declarative-item title="Item 2"></declarative-item>
+        <declarative-item title="Item 3"></declarative-item>
+        <declarative-item title="Item 4"></declarative-item>
+        <declarative-item title="Item 5"></declarative-item>
+        <declarative-item title="Item 6"></declarative-item>
+        <declarative-item title="Item 7"></declarative-item>
+        <declarative-item title="Item 8"></declarative-item>
+        <declarative-item title="Item 9"></declarative-item>
+      </at-core-carousel>
+    </div>
+
+    <div class="demo-container">
+      <h4 class="font-headline">max-items 4, no moreUrl no moreTitle</h4>
+      <at-core-carousel max-items="4">
+        <declarative-item title="Item 1"></declarative-item>
+        <declarative-item title="Item 2"></declarative-item>
+        <declarative-item title="Item 3"></declarative-item>
+        <declarative-item title="Item 4"></declarative-item>
+        <declarative-item title="Item 5"></declarative-item>
+        <declarative-item title="Item 6"></declarative-item>
+        <declarative-item title="Item 7"></declarative-item>
+        <declarative-item title="Item 8"></declarative-item>
+        <declarative-item title="Item 9"></declarative-item>
+      </at-core-carousel>
+    </div>
+
+    <div class="demo-container">
+      <h4 class="font-headline">max-items 4, no moreUrl, moreTitle = "Yay! A title"</h4>
+      <at-core-carousel max-items="4" more-title="Yay! A title">
+        <declarative-item title="Item 1"></declarative-item>
+        <declarative-item title="Item 2"></declarative-item>
+        <declarative-item title="Item 3"></declarative-item>
+        <declarative-item title="Item 4"></declarative-item>
+        <declarative-item title="Item 5"></declarative-item>
+        <declarative-item title="Item 6"></declarative-item>
+        <declarative-item title="Item 7"></declarative-item>
+        <declarative-item title="Item 8"></declarative-item>
+        <declarative-item title="Item 9"></declarative-item>
+      </at-core-carousel>
+    </div>
+
+    <div class="demo-container">
+      <h4 class="font-headline">max-items 4, moreUrl="http://www.google.com", moreTitle=""</h4>
+      <at-core-carousel max-items="4" more-url="http://www.google.com">
+        <declarative-item title="Item 1"></declarative-item>
+        <declarative-item title="Item 2"></declarative-item>
+        <declarative-item title="Item 3"></declarative-item>
+        <declarative-item title="Item 4"></declarative-item>
+        <declarative-item title="Item 5"></declarative-item>
+        <declarative-item title="Item 6"></declarative-item>
+        <declarative-item title="Item 7"></declarative-item>
+        <declarative-item title="Item 8"></declarative-item>
+        <declarative-item title="Item 9"></declarative-item>
+      </at-core-carousel>
+    </div>
+
+    <div class="demo-container">
+      <h4 class="font-headline">max-items 4, moreUrl="http://www.google.com", moreTitle = "Yay! A title"</h4>
+      <at-core-carousel max-items="4" more-url="http://www.google.com" more-title="Yay! A title">
+        <declarative-item title="Item 1"></declarative-item>
+        <declarative-item title="Item 2"></declarative-item>
+        <declarative-item title="Item 3"></declarative-item>
+        <declarative-item title="Item 4"></declarative-item>
+        <declarative-item title="Item 5"></declarative-item>
+        <declarative-item title="Item 6"></declarative-item>
+        <declarative-item title="Item 7"></declarative-item>
+        <declarative-item title="Item 8"></declarative-item>
+        <declarative-item title="Item 9"></declarative-item>
+      </at-core-carousel>
+    </div>
+
+    <div class="demo-container"></div>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: "demo-max-items",
+    properties: {
+    },
+    ready: function() {
+    }
+  });
+
+</script>
