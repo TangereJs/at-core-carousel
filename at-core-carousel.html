@@ -1,39 +1,37 @@
 <link rel="import" href="../tangere/tangere.html">
 <link rel="import" href="../at-theme/at-theme.html">
 <link rel="import" href="../at-i18n/at-i18n-behavior.html">
-<link rel="import" href="../at-core-spinner/at-core-spinner.html" />
-<link rel="import" href="../at-carbon-message/at-carbon-message.html" />
-<link rel="import" href="../at-carbon-icon-color/at-carbon-icon-color.html" />
-<link rel="import" href="../at-link/at-link.html" />
-<link rel="import" href="../at-core-card/at-core-card.html" />
-<link rel="import" href="../at-core-style-classes/at-core-style-classes.html" />
-
-<link rel="import" href="lib/swiper-styles.html" />
 <link rel="import" href="swipe-import.html">
-
 
 <dom-module id="at-core-carousel">
   <template>
-    <style include="at-core-style-classes"></style> 
-    <style include="swiper-styles">
+    <style include="at-form-common"></style>
+    <style>
       :host {
         display: block;
         box-sizing: border-box;
-        position: relative;
-        min-height: 50px;
       }
 
-      .swiper-slide {
+      .swipe {
         overflow: hidden;
+        visibility: hidden;
+        position: relative;
       }
 
-      .swiper-container-no-overlay {
-        margin: 0 50px;
+      .swipe-wrap {
+        overflow: hidden;
+        position: relative;
       }
 
-      .swiper-pagination-no-overlay {
-        position: static;
+      .swipe-wrap > div {
+        float: left;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+        box-sizing: border-box;
       }
+
+      .swipe-item { }
 
       /*
        * styles for horizontal scrollable single row carousel when cards have fixed width
@@ -42,210 +40,86 @@
         display: none;
       }
 
-      .navigation-as-overlay {
-        margin: 0 50px 30px 50px;
-      }
-
-      .button-icon {
-        width: 100%;
-        height: 100%;
+      .carousel {
         display: block;
+        overflow-x: auto;
+        position: relative;
+        white-space: nowrap;
+        transform: translate3d(0,0,0);
       }
 
-      .link-container {
-        @apply(--layout-horizontal);
-        @apply(--layout-end-justified);
-        margin: 0 50px 8px 0;
+      .carousel-wrap {
+        display: inline-block;
       }
 
-      at-core-card {
-        box-shadow: 0 1px 2px #aaa;
-        box-shadow: rgba(0, 0, 0, 0.098) 0px 2px 4px, rgba(0, 0, 0, 0.1) 0px 0px 3px;
-        background: white;
-        margin: 15px;
-        border-radius: 3px;
-        overflow: hidden;
-        user-select: none;
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
+      .carousel-item {
+        display: inline-block;
+        width: 300px;
+        white-space: normal;
       }
+
     </style>
-
     <at-core-spinner id="spinner" type="wave"></at-core-spinner>
-    
     <at-carbon-message id="msgEmptyList" type="info"></at-carbon-message>
-
-    <div class="link-container">
-      <at-link id="moreLink" class="block font-body1 action" href="[[moreUrl]]" hidden$="[[_computeLinkHidden(items, maxItems)]]"></at-link>
+    <div id="insertContainer" class="swipe">
+      <div id="insertPoint" class="swipe-wrap">
+      </div>
     </div>
 
-    <div id="insertContainer" class="swiper-container">
-      <div id="insertPoint" class="swiper-wrapper"></div>
-      
-      <div id="swiperPagination" class="swiper-pagination"></div>
-    </div>
-    
-    <div id="swiperButtonPrev" class="swiper-button-prev" hidden>
-      <at-carbon-icon-color icon="now:caret-left" class="button-icon" color="blue"></at-carbon-icon-color>
-    </div>
-    <div id="swiperButtonNext" class="swiper-button-next" hidden>
-      <at-carbon-icon-color icon="now:caret-right" class="button-icon" color="blue"></at-carbon-icon-color>
-    </div>      
-
-    <div id="staticItems" hidden>
+    <div id="staticItems" class="hidden">
       <content id="contentInsertPoint" select="*"></content>
     </div>
 
   </template>
   <script>
+    'use strict';
     Polymer({
       is: 'at-core-carousel',
       behaviors: [ Tangere.behaviors.i18n ],
       properties: {
-        
         items: {
           type: Array,
           value: function() {
             return [];
           }
         },
-
         itemComponent: {
           type: String,
           value: "",
           notify: true
         },
-
-        itemCardWrapper: {
-          type: Boolean,
-          value: false
-        },
-
         cardWidth: {
           type: Number,
           value: 320,
           notify: true
         },
-
         mode: {
           type: String,
           value: "static",
           xtype: "enum",
           xvaluelist: "static,bound"
         },
-
+        indicator: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+          observer: "changeIndicator"
+        },
         emptyList: {
           type: String,
           value: "No data found"
-        },
-
-        centeredSlides: {
-          type: Boolean,
-          value: false
-        },
-
-        navigationAsOverlay: {
-          type: Boolean,
-          value: false
-        },
-
-        spaceBetween: {
-          type: Number,
-          value: 0
-        },
-
-        maxItems: {
-          type: Number,
-          value: 0
-        },
-
-        moreUrl: {
-          type: String,
-          value: '',
-          observer: '_moreUrlChanged'
-        },
-
-        moreTitle: {
-          type: String,
-          valuel: '',
-          observer: '_moreTitleChanged'
-        },
-
-        modelRoot: {
-          type: String,
-          value: ""
         }
-
       },
 
       observers: [
         'initialize(items.*, itemComponent, cardWidth, emptyList)'
       ],
 
-      $meta: [{
-        title: "Carousel",
-        type: "at-core-carousel",
-        events: [],
-        icon: "now:wrench"
-      }],
-
-      _computeLinkHidden: function(items, maxItems) {
-        return items.length <= maxItems;
-      },
-
-      // There is a bug in polymer-js where compound observers are not triggered if all properties are not set on element as attributes
-      // example: _computeLinkTitle(moreUrl, moreTitle) specified in html template or observers array
-      // will not be triggered for <at-core-carousel></at-core-carousel>
-      // will be triggered for <at-core-carousel more-title="A title"></at-core-carousel>
-      // will not be triggered for <at-core-carousel more-url="A url"></at-core-carousel> (this is the BUG)
-      // will be triggered for <at-core-carousel more-title="A title" more-url="A url"></at-core-carousel>
-      // Separate observer functions are used instead. THANK YOU polymer-js!
-      _moreUrlChanged: function(newValue, oldValue) {
-        if (this.moreTitle) return;
-        Polymer.dom(this.$.moreLink).textContent = newValue;
-      },
-
-      _moreTitleChanged: function(newValue, oldValue) {
-        Polymer.dom(this.$.moreLink).textContent = newValue;
-      },
-
-      actionListener: function (event) {
-
-        var _model = this.modelRoot ? event.detail.model : event.detail.model.state;
-        if (this.modelRoot) _model = this._getObjPath(_model, this.modelRoot);
-
-        if (_model) { 
-          if(_model.items) this.items = _model.items;
-          if(_model.moreUrl) this.moreUrl = _model.moreUrl;
-          if(_model.moreTitle) this.moreTitle = _model.moreTitle;
+      changeIndicator: function() {
+        this.$.spinner.display = this.indicator ? "block" : "none";
+        if (this.indicator) {
+          this.clear();
         }
-
-        this.model = _model;
-
-      },
-
-      _getObjPath: function (obj, path) {
-
-        if (!path) return obj;
-        var paths = path.split('.'),
-          current = obj;
-
-        for (var i = 0; i < paths.length; ++i) {
-          if (current[paths[i]] == undefined) {
-            return undefined;
-          } else {
-            current = current[paths[i]];
-          }
-        }
-        return current;
-      },
-
-      attached: function() {
-        this.isAttached = true;
-        this.initialize();
       },
 
       clear: function() {
@@ -257,41 +131,50 @@
         while(insertPoint.firstChild) {
           insertPoint.removeChild(insertPoint.firstChild);
         }
-        Polymer.dom(this.$.swiperPagination).innerHTML = '';
-
         Polymer.dom.flush();
       },
 
       initialize: function() {
-        if (!this.isAttached) return;
-
-        // clear previous error message
-        this.$.msgEmptyList.html = "";
-
-        // hide the buttons 
-        this.$.swiperButtonPrev.setAttribute('hidden', true);
-        this.$.swiperButtonNext.setAttribute('hidden', true);
-
-        // if swiper instance exists; destroy it
-        if (this._swipeInstance) {
-          this._swipeInstance.destroy(true);
-          this._swipeInstance = undefined;
+        if (!this.isAttached) {
+          return ;
         }
 
+        // clear previous error message
+        var mel = this.$.msgEmptyList;
+        mel.html = "";
+
+        // remove css classes from insertContainer and insertPoint
+        var insertContainer = Polymer.dom(this.$.insertContainer);
+        insertContainer.classList.remove('swipe');
+        insertContainer.classList.remove('carousel');
+        var insertPoint = Polymer.dom(this.$.insertPoint);
+        insertPoint.classList.remove('swipe-wrap');
+        insertPoint.classList.remove('carousel-wrap');
+
         var renderMode = this._getRenderMode();
+        if (renderMode === "carousel") {
+          // render mode is carousel; add carousel classes to the insertContainer and insertPoint
+          insertContainer.classList.add('carousel');
+          insertPoint.classList.add('carousel-wrap');
+        } else {
+          // render mode is swipe; add swipe classes to the insertContainer and insertPoint
+          insertContainer.classList.add('swipe');
+          insertPoint.classList.add('swipe-wrap');
+          renderMode = "swipe";
+        }
 
         // check mode and initialize correct data source
         var mode = this.mode;
         if (mode === "bound") {
           this._initializeBoundDataSource(renderMode);
-
         } else if (mode === "static") {
           this._initializeStaticDataSource(renderMode);
-
         } else {
           // invalid mode specified
-          this.$.msgEmptyList.html = this.T("Mode {0} is invalid.", mode);
-        }       
+          // TODO: localize
+          Polymer.dom(mel).innerHTML = this.T("Mode {0} is invalid.", mode);
+        }
+
       },
 
       _initializeBoundDataSource: function(renderMode) {
@@ -300,11 +183,6 @@
         var items = this.items;
         var itemComponent = this.itemComponent;
 
-        if (!itemComponent) {
-          errorCarbonMsg.html = this.T("Element name for data rendering not provided.");
-          return;
-        }
-
         // validate input parameters
         if (!items) {
           // if items is null or undefined
@@ -312,76 +190,53 @@
           return;
         }
 
-        function isArray(obj) {
-          return Object.prototype.toString.apply(obj) === "[object Array]";
+        if (!itemComponent) {
+          errorCarbonMsg.html = this.T("Element name for data rendering not provided.");
+          return;
+        }
+
+        if (!renderMode) {
+          errorCarbonMsg.html = this.T("Rendering mode not specified.");
+          return;
         }
 
         // show error if items is an empty array
-        if (isArray(items) && items.length === 0) {
-          this.$.spinner.display = "none";
+        if (this._isArray(items) && items.length === 0) {
           errorCarbonMsg.html = this.emptyList;
           return;
         }
 
-        // check to see if itemComponent has already been imported
-        var found = false;
-        var registrations = Polymer.telemetry.registrations;
-        for (var i = 0; i < registrations.length && !found; i++) {
-          var registration = registrations[i];
-          found = registration.is === itemComponent; 
-        }
+        // clear previously displayed elements
+        this.clear();
 
-        if (found) {
-          // display the available data
-          this._bindItems(renderMode);
-          return;
-        }
+        // display the available data
 
-        // dynamically load item-component
+        if (!!this.itemComponent) {
 
-        // expand relative name with name prefix
-        var elName = this.itemComponent;
-        if (elName.indexOf(".card") > 0) {
-     
-          var elNameOrg = elName;
-          var resolve = { namePrefix: "" };
+          // dynamically load item-component
 
-          this.fire("resolve-name-prefix", resolve);
-          var prefix = resolve.namePrefix;
+          // load item-component from other component (itemComponent = component-name/item-component) or from localfolder (item-component)
+          var compUrl = this.resolveUrl("../");
+          if (window.ComponentsBase != undefined) compUrl = window.ComponentsBase;
 
-          if (elName == "default.card") elName = "";
-          elName = elName.replace("default.", "");
+          var compName = this.itemComponent;
+          var importPath = compName.indexOf("/") >= 0 ? compUrl + compName + ".html" : compName + ".html";
 
-          elName = prefix + "/" + prefix + (elName ? ("-" + elName.replace(".", "-")) : "");
-
-          this.itemComponent = elName;
-        }
-
-        // load item-component from other component (itemComponent = component-name/item-component) or from localfolder (item-component)
-        var compUrl = this.resolveUrl("../");
-        if (window.ComponentsBase != undefined) compUrl = window.ComponentsBase;
-
-        var compName = this.itemComponent;
-        var importPath = compName.indexOf("/") >= 0 ? compUrl + compName + ".html" : compName + ".html";
-
-        this.importHref(
-          importPath, 
-          function success() {
+          this.importHref(importPath, function () {
             this._bindItems(renderMode);
-          },
-          function error() {
+          }, function () {
             Polymer.signal("busy-end");
             alert(window.location.href + "\n\nERROR: failed to load list item " + this.itemComponent);
             location.hash = ""; // clear current hash
             location.reload(); // go to start app by reloading without hash
-          }, true
-        );
+          });
+        } else {
+          // with inline template binding can happen immediately
+          this._bindItems(renderMode);
+        }
       },
 
       _bindItems: function (renderMode) {
-        // clear previously displayed elements
-        this.clear();
-
         // get correct renderElementName
         var renderElementName = this.itemComponent;
         if (renderElementName.indexOf("/") > 0) {
@@ -390,9 +245,11 @@
 
         // create swipe item prototype for cloning
         var swipeItemPrototype = document.createElement("div");
-        Polymer.dom(swipeItemPrototype).classList.add("swiper-slide");
         if (renderMode === "carousel") {
+          Polymer.dom(swipeItemPrototype).classList.add("carousel-item");
           swipeItemPrototype.style.width = this.cardWidth + 'px';
+        } else if (renderMode === "swipe") {
+          Polymer.dom(swipeItemPrototype).classList.add("swipe-item");
         }
 
         // create render element prototype for cloning
@@ -402,150 +259,74 @@
         var insertPoint = this.$.insertPoint;
 
         // iterate through data, clone swipe/render elements and append to insert point
-        var itemsToRender = this.items;
-        // if maxItems is set, limit rendered items to maxItems
-        if (this.maxItems > 0) {
-          itemsToRender = this.items.slice(0, this.maxItems);
-        }
-
-        itemsToRender.forEach(function(renderItemData){
+        for (var i = 0; i < this.items.length; i++) {
+          var renderItemData = this.items[i];
 
           var swipeItem = swipeItemPrototype.cloneNode(true);
-
           var renderElement = document.createElement(renderElementName);
-
-
-
-          if (renderElement.properties.model != undefined) {
-            // designer cards use .model for binding  
-            var dm = { items: [renderItemData], item: renderItemData }; // we unfortunately currently have two conventions for isolated cards items[] with one entry AND item
-            
-            if (this.model) {
-              dm._card = this.model._card;
-              dm._container = this.model._container;
-            }
-
-            renderElement.model = dm;
-
-          } else {
-            renderElement.item = renderItemData;
-          }
-
-          if (this.itemCardWrapper) {
-            var wrapper = document.createElement("at-core-card");
-            Polymer.dom(wrapper).appendChild(renderElement);
-            renderElement = wrapper;
-          }
-
-          if (!this.navigationAsOverlay) {
-            if (renderMode === "swipe") {
-              renderElement.classList.add('navigation-as-overlay');
-            } else if (renderMode === "carousel") {
-              this.$.insertContainer.classList.add('swiper-container-no-overlay');
-              this.$.swiperPagination.classList.add('swiper-pagination-no-overlay');
-            }
-          }
+          renderElement.item = renderItemData;
 
           Polymer.dom(swipeItem).appendChild(renderElement);
           Polymer.dom(insertPoint).appendChild(swipeItem);
-        }, this);
+        }
+
+        var insertContainer = this.$.insertContainer;
+        // transform ShadyDom styles of innerHTML
+        if (!Polymer.Settings.useShadow) {
+          Polymer.StyleTransformer.dom(insertContainer, this.is, true);
+        }
+
+        this.indicator = false; // hide indicator before list is rendered
 
         Polymer.dom.flush();
 
-        // transform ShadyDom styles of innerHTML
-        if (!Polymer.Settings.useShadow) {
-          Polymer.StyleTransformer.dom(this.$.insertContainer, this.is, true);
+        if (this.swipeInstance) {
+          this.swipeInstance.kill();
         }
-
-        this._createSwipeInstance(renderMode, this.items.length);
+        if (renderMode === "swipe") {
+          var swipeInstance = this.swipeInstance = new Swipe(insertContainer, {
+            draggable: true
+          });
+        }
 
         this.fire("list-ready");
       },
 
       _initializeStaticDataSource: function (renderMode) {
-
-        var children = this.getEffectiveChildren();
-        
-        if (!children.length) {
-          this.$.spinner.display = 'none';
-          this.$.msgEmptyList.html = this.T("Data for items not provided.");
-          return;
-        }
-
+        var staticItems = Polymer.dom(this.$.staticItems);
         var insertPoint = Polymer.dom(this.$.insertPoint);
 
-        var swiperSlidePrototype = document.createElement('div');
-        swiperSlidePrototype.classList.add('swiper-slide');
-        if (renderMode === "carousel") {
-          swiperSlidePrototype.style.width = this.cardWidth + 'px';
-        }
-
-        // iterate through data, clone swipe/render elements and append to insert point
-        var itemsToRender = children;
-        // if maxItems is set, limit rendered items to maxItems
-        if (this.maxItems > 0) {
-          itemsToRender = Array.prototype.slice.call(children, 0, this.maxItems);
-        }
-
-        Array.prototype.forEach.call(itemsToRender, function(child, index){ 
-          
-          child.parentElement.removeChild(child);          
-
-          var swiperSlide = swiperSlidePrototype.cloneNode(true);
-          swiperSlide.appendChild(child);
-          insertPoint.appendChild(swiperSlide);
-
-          if (!this.navigationAsOverlay) {
-            if (renderMode === "swipe") {
-              child.classList.add('navigation-as-overlay');
-            } else if (renderMode === "carousel") {
-              this.$.insertContainer.classList.add('swiper-container-no-overlay');
-              this.$.swiperPagination.classList.add('swiper-pagination-no-overlay');
+        var children = this.getContentChildren('#contentInsertPoint');
+        var child;
+        var className = renderMode === "carousel" ? "carousel-item" : "swipe-item";
+        for (var i = 0; i < children.length; i++) {
+          child = children[i];
+          child.parentElement.removeChild(child);
+          if (child.nodeType !== 3) {
+            if (renderMode === "carousel") {
+              child.style.width = this.cardWidth + 'px';
             }
+            child.classList.add(className);
+            insertPoint.appendChild(child);
           }
-
-        }, this);
+        }
 
         Polymer.dom.flush();
-        
-        this._createSwipeInstance(renderMode, children.length);
-      },
+        var insertContainer = this.$.insertContainer;
 
-      _createSwipeInstance: function(renderMode, itemCount) {
-        if (this._swipeInstance) {
-          this._swipeInstance.destroy();
+        if (this.swipeInstance) {
+          this.swipeInstance.kill();
         }
 
-        var self = this;
-
-        var swiperOptions = {
-          centeredSlides: this.centeredSlides,
-          pagination: this.$.swiperPagination,
-          nextButton: this.$.swiperButtonNext,
-          prevButton: this.$.swiperButtonPrev,
-          paginationBulletRender: function(s, i, bulletClass) {
-            return '<span class="style-scope at-core-carousel '+ bulletClass +'"></span>';
-          },
-          paginationClickable: true,
-          onInit: function() {
-            self.$.spinner.display = 'none';
-            if (itemCount > 1) {
-              self.$.swiperButtonPrev.removeAttribute('hidden');
-              self.$.swiperButtonNext.removeAttribute('hidden');
-            } else {
-              Polymer.dom(self.$.swiperPagination).innerHTML = '';
-            }
-          }
-        };
-
-        if (renderMode === "carousel") {
-          swiperOptions.slidesPerView = 'auto';
-          if (!isNaN(this.spaceBetween)) {
-            swiperOptions.spaceBetween = this.spaceBetween;
-          }
+        if (renderMode === "swipe") {
+          var self = this;
+          this.async(function () {
+            var swipeInstance = self.swipeInstance = new Swipe(insertContainer, {
+              draggable: true
+            });
+          });
         }
 
-        this._swipeInstance = new Swiper(this.$.insertContainer, swiperOptions);
       },
 
       _getRenderMode: function () {
@@ -563,8 +344,16 @@
         }
 
         return result;
-      }
+      },
 
+      _isArray: function (obj) {
+        return Object.prototype.toString.call(obj) === "[object Array]";
+      },
+
+      attached: function() {
+        this.isAttached = true;
+        this.initialize();
+      }
     });
   </script>
 </dom-module>
