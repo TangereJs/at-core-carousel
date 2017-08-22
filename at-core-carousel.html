@@ -78,6 +78,8 @@
     
     <at-carbon-message id="msgEmptyList" type="info"></at-carbon-message>
 
+    <div id="infoTextContainer"></div>
+
     <div class="link-container">
       <at-link id="moreLink" class="block font-body1 action" href="[[moreUrl]]" hidden$="[[_computeLinkHidden(items, maxItems)]]"></at-link>
     </div>
@@ -177,6 +179,12 @@
         modelRoot: {
           type: String,
           value: ""
+        },
+
+        infoText: {
+          type: String,
+          value: '',
+          observer: '_infoTextChanged'
         }
 
       },
@@ -194,6 +202,24 @@
 
       _computeLinkHidden: function(items, maxItems) {
         return items.length <= maxItems;
+      },
+
+      _infoTextChanged: function(newValue, oldValue) {
+        if (!newValue) {
+          Polymer.dom(this.$.infoTextContainer).innerHTML = '';
+          return;
+        }
+
+        var children = this.getEffectiveChildren();
+        var hasStaticItems = children.length > 0;
+        var hasBoundItems = this.items && this.items.length > 0;
+
+        if (!(hasStaticItems || hasBoundItems)) {
+          Polymer.dom(this.$.infoTextContainer).innerHTML = '';
+          return;
+        }
+
+        Polymer.dom(this.$.infoTextContainer).innerHTML = newValue;
       },
 
       // There is a bug in polymer-js where compound observers are not triggered if all properties are not set on element as attributes

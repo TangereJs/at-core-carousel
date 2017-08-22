@@ -1,0 +1,58 @@
+<link rel="import" href="../../tangere/tangere.html" />
+<link rel="import" href="../at-core-carousel.html" />
+<link rel="import" href="../../at-core-style-classes/at-core-style-classes.html" />
+<link rel="import" href="declarative-item.html" />
+
+<dom-module id="info-text-demo">
+  <template>
+    <style>
+      :host {
+        display: block;
+        box-sizing: border-box;
+      }
+
+      .row {
+        margin-top: 32px;
+      }
+    </style>
+    
+    <div>Hello world!</div>
+    
+    <div class="row">
+      <at-core-carousel info-text="This is demo info text"></at-core-carousel>
+    </div>
+
+    <div class="row">
+      <at-core-carousel info-text="This is demo info text">
+        <declarative-item title="Item 1"></declarative-item>
+      </at-core-carousel>
+    </div>
+
+    <div class="row">
+      <at-core-carousel info-text="This is demo info text">
+        <declarative-item title="Item 1"></declarative-item>
+        <declarative-item title="Item 2"></declarative-item>
+        <declarative-item title="Item 3"></declarative-item>
+        <declarative-item title="Item 4"></declarative-item>
+      </at-core-carousel>
+    </div>
+
+    <div class="row">
+      <at-core-carousel info-text='<span class="font-bold font-body1">This is demo info text</span>'>
+        <declarative-item title="Item 1"></declarative-item>
+      </at-core-carousel>
+    </div>
+
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: "info-text-demo",
+    properties: {
+      
+    },
+    ready: function () {
+
+    }
+  });
+</script>
