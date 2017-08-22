@@ -1,0 +1,108 @@
+<link rel="import" href="../../tangere/tangere.html" />
+<link rel="import" href="../at-core-carousel.html" />
+<link rel="import" href="../../at-core-style-classes/at-core-style-classes.html" />
+<link rel="import" href="declarative-item.html" />
+
+<dom-module id="center-mode-demo">
+  <template>
+    <style include="at-core-style-classes">
+      :host {
+        display: block;
+        box-sizing: border-box;
+      }
+
+      .row {
+        margin-top: 32px;
+      }
+    </style>
+
+    <h1 class="font-display1">CenterMode demo</h1>
+    
+    <div class="row">
+      <h4 class="font-headline">centerMode left align, no items</h4>
+      <at-core-carousel center-mode="0"></at-core-carousel>
+    </div>
+
+    <div class="row">
+      <h4 class="font-headline">centerMode left align, single item</h4>
+      <at-core-carousel center-mode="0">
+        <declarative-item title="Item 1"></declarative-item>
+      </at-core-carousel>
+    </div>
+
+    <div class="row">
+      <h4 class="font-headline">centerMode left align, multiple items</h4>
+      <at-core-carousel center-mode="0">
+        <declarative-item title="Item 1"></declarative-item>
+        <declarative-item title="Item 2"></declarative-item>
+        <declarative-item title="Item 3"></declarative-item>
+        <declarative-item title="Item 4"></declarative-item>
+        <declarative-item title="Item 5"></declarative-item>
+        <declarative-item title="Item 6"></declarative-item>
+        <declarative-item title="Item 7"></declarative-item>
+      </at-core-carousel>
+    </div>
+
+    <div class="row">
+      <h4 class="font-headline">centerMode center, no items</h4>
+      <at-core-carousel center-mode="1"></at-core-carousel>
+    </div>
+
+    <div class="row">
+      <h4 class="font-headline">centerMode center, single item</h4>
+      <at-core-carousel center-mode="1">
+        <declarative-item title="Item 1"></declarative-item>
+      </at-core-carousel>
+    </div>
+
+    <div class="row">
+      <h4 class="font-headline">centerMode center, multiple items</h4>
+      <at-core-carousel center-mode="1">
+        <declarative-item title="Item 1"></declarative-item>
+        <declarative-item title="Item 2"></declarative-item>
+        <declarative-item title="Item 3"></declarative-item>
+        <declarative-item title="Item 4"></declarative-item>
+        <declarative-item title="Item 5"></declarative-item>
+        <declarative-item title="Item 6"></declarative-item>
+        <declarative-item title="Item 7"></declarative-item>
+      </at-core-carousel>
+    </div>
+
+    <div class="row">
+      <h4 class="font-headline">centerMode center single item, no items</h4>
+      <at-core-carousel center-mode="2"></at-core-carousel>
+    </div>
+
+    <div class="row">
+      <h4 class="font-headline">centerMode center single item, single item</h4>
+      <at-core-carousel center-mode="2">
+        <declarative-item title="Item 1"></declarative-item>
+      </at-core-carousel>
+    </div>
+
+    <div class="row">
+      <h4 class="font-headline">centerMode center single item, multiple items</h4>
+      <at-core-carousel center-mode="2">
+        <declarative-item title="Item 1"></declarative-item>
+        <declarative-item title="Item 2"></declarative-item>
+        <declarative-item title="Item 3"></declarative-item>
+        <declarative-item title="Item 4"></declarative-item>
+        <declarative-item title="Item 5"></declarative-item>
+        <declarative-item title="Item 6"></declarative-item>
+        <declarative-item title="Item 7"></declarative-item>
+      </at-core-carousel>
+    </div>
+
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: "center-mode-demo",
+    properties: {
+      
+    },
+    ready: function () {
+
+    }
+  });
+</script>

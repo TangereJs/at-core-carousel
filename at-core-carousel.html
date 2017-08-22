@@ -144,9 +144,15 @@
           value: "No data found"
         },
 
-        centeredSlides: {
-          type: Boolean,
-          value: false
+        centerMode: {
+          type: String,
+          value: "0",
+          xtype: 'enum',
+          xvaluelist: [
+            { title: 'Left align', value: "0" },
+            { title: 'Center', value: "1" },
+            { title: 'Center single item', value: "2" }
+          ]
         },
 
         navigationAsOverlay: {
@@ -543,9 +549,10 @@
         }
 
         var self = this;
+        var centeredSlides = this.centerMode === "1" || (this.centerMode === "2" && itemCount === 1);
 
         var swiperOptions = {
-          centeredSlides: this.centeredSlides,
+          centeredSlides: centeredSlides,
           pagination: this.$.swiperPagination,
           nextButton: this.$.swiperButtonNext,
           prevButton: this.$.swiperButtonPrev,
