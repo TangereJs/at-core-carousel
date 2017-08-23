@@ -54,7 +54,6 @@
 
       .link-container {
         @apply(--layout-horizontal);
-        @apply(--layout-end-justified);
         margin: 0 50px 8px 0;
       }
 
@@ -72,16 +71,24 @@
         -moz-user-select: none;
         -ms-user-select: none;
       }
+
+      .info-text-container {
+        @apply(--layout-flex);
+      }
+
+      .more-link {
+        @apply(--layout-block);
+      }
     </style>
 
     <at-core-spinner id="spinner" type="wave"></at-core-spinner>
     
     <at-carbon-message id="msgEmptyList" type="info"></at-carbon-message>
 
-    <div id="infoTextContainer"></div>
 
     <div class="link-container">
-      <at-link id="moreLink" class="block font-body1 action" href="[[moreUrl]]" hidden$="[[_computeLinkHidden(items, maxItems)]]"></at-link>
+      <div id="infoTextContainer" class="info-text-container"></div>
+      <at-link id="moreLink" class="block font-body1 action more-link" href="[[moreUrl]]" hidden$="[[_computeLinkHidden(items, maxItems)]]"></at-link>
     </div>
 
     <div id="insertContainer" class="swiper-container">
@@ -207,7 +214,13 @@
       }],
 
       _computeLinkHidden: function(items, maxItems) {
-        return items.length <= maxItems;
+        // if maxItems is not set all items will be rendered; more link should be hidden
+        if (!maxItems) return true;
+
+        var children = this.getEffectiveChildren();
+        var length = children.length || items.length;
+        // otherwise display more link if item count > maxItems
+        return length <= maxItems;
       },
 
       _infoTextChanged: function(newValue, oldValue) {
@@ -237,11 +250,11 @@
       // Separate observer functions are used instead. THANK YOU polymer-js!
       _moreUrlChanged: function(newValue, oldValue) {
         if (this.moreTitle) return;
-        Polymer.dom(this.$.moreLink).textContent = newValue;
+        Polymer.dom(this.$.moreLink).innerHTML = newValue;
       },
 
       _moreTitleChanged: function(newValue, oldValue) {
-        Polymer.dom(this.$.moreLink).textContent = newValue;
+        Polymer.dom(this.$.moreLink).innerHTML = newValue;
       },
 
       actionListener: function (event) {
@@ -253,6 +266,7 @@
           if(_model.items) this.items = _model.items;
           if(_model.moreUrl) this.moreUrl = _model.moreUrl;
           if(_model.moreTitle) this.moreTitle = _model.moreTitle;
+          if(_model.infoText) this.infoText = _model.infoText;
         }
 
         this.model = _model;

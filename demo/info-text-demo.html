@@ -16,20 +16,18 @@
       }
     </style>
     
-    <div>Hello world!</div>
-    
     <div class="row">
-      <at-core-carousel info-text="This is demo info text"></at-core-carousel>
+      <at-core-carousel info-text="This is demo info text (no items)"></at-core-carousel>
     </div>
 
     <div class="row">
-      <at-core-carousel info-text="This is demo info text">
+      <at-core-carousel info-text="This is demo info text (single item)">
         <declarative-item title="Item 1"></declarative-item>
       </at-core-carousel>
     </div>
 
     <div class="row">
-      <at-core-carousel info-text="This is demo info text">
+      <at-core-carousel info-text="This is demo info text (multiple items)">
         <declarative-item title="Item 1"></declarative-item>
         <declarative-item title="Item 2"></declarative-item>
         <declarative-item title="Item 3"></declarative-item>
@@ -38,7 +36,36 @@
     </div>
 
     <div class="row">
-      <at-core-carousel info-text='<span class="font-bold font-body1">This is demo info text</span>'>
+      <at-core-carousel info-text='<span class="font-bold font-body1">This is demo info text (single item)</span>'>
+        <declarative-item title="Item 1"></declarative-item>
+      </at-core-carousel>
+    </div>
+
+    <div class="row">
+      <at-core-carousel info-text="This is demo info text (no items)" more-link="http://www.google.com" more-title="Go to google.com"></at-core-carousel>
+    </div>
+
+    <div class="row">
+      <at-core-carousel info-text="This is demo info text (single item)" more-link="http://www.google.com" more-title="Go to google.com">
+        <declarative-item title="Item 1"></declarative-item>
+      </at-core-carousel>
+    </div>
+
+    <div class="row">
+      <at-core-carousel info-text="This is demo info text (multiple items)" more-link="http://www.google.com" more-title="Go to google.com" max-items="4">
+        <declarative-item title="Item 1"></declarative-item>
+        <declarative-item title="Item 2"></declarative-item>
+        <declarative-item title="Item 3"></declarative-item>
+        <declarative-item title="Item 4"></declarative-item>
+        <declarative-item title="Item 5"></declarative-item>
+        <declarative-item title="Item 6"></declarative-item>
+        <declarative-item title="Item 7"></declarative-item>
+        <declarative-item title="Item 8"></declarative-item>
+      </at-core-carousel>
+    </div>
+
+    <div class="row">
+      <at-core-carousel info-text='<span class="font-bold font-body1">This is demo info text (single item)</span>' more-link="http://www.google.com" more-title="Go to google.com">
         <declarative-item title="Item 1"></declarative-item>
       </at-core-carousel>
     </div>
