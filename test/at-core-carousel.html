@@ -15,7 +15,7 @@
   <script src="../../iron-test-helpers/test-helpers.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
 
-  <link rel="import" href="../demo-item.html">
+  <link rel="import" href="../demo/bound-item.html">
   <link rel="import" href="../at-core-carousel.html">
 </head>
 
@@ -57,12 +57,13 @@
 
         carousel.mode = 'bound';
         carousel.items = data;
-        carousel.itemComponent = "../at-core-carousel/demo-item";
+        carousel.itemComponent = "../components/at-core-carousel/demo/bound-item";
 
         // carousel needs to be attached to another element in the DOM so that attached event will fire
         // carousel is initialized on attached event because only then are correct dimensions available
         var tmpDiv = document.createElement('div');
         Polymer.dom(tmpDiv).appendChild(carousel);
+        Polymer.dom.flush();
 
         // we want to query insert point to find out what is there
         // now calling flush should be enough for this, as WCT docs say flush waits for all DOM mutations to take place
@@ -73,7 +74,7 @@
         flush(function() {
           setTimeout(function () {
             var insertPoint = carousel.$.insertPoint;
-            var demoItems = Polymer.dom(insertPoint).querySelectorAll('demo-item');
+            var demoItems = Polymer.dom(insertPoint).querySelectorAll('bound-item');
             var demoItemsCount = demoItems.length;
             assert.equal(demoItemsCount, 3, 'All items are not processed');
             done();

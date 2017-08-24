@@ -9,6 +9,7 @@
     "at-core-view": "TangereJs/at-core-view#master",
     "at-carbon-clamp": "TangereJs/at-carbon-clamp#master",
     "at-carbon-moment": "TangereJs/at-carbon-moment#master",
+    "at-core-signals": "TangereJs/at-core-signals#master",
     "at-doc-viewer": "TangereJs/at-doc-viewer#master"
   }
 }
