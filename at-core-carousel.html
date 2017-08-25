@@ -565,8 +565,12 @@
 
         var self = this;
         var centeredSlides = this.centerMode === "1" || (this.centerMode === "2" && itemCount === 1);
+        var ccWidth = this.getBoundingClientRect().width;
+        var cardWidth = parseInt(this.cardWidth);
+        var slidesPerGroup = !isNaN(cardWidth) && this.cardWidth > 0 ? Math.floor(ccWidth / this.cardWidth) : 1;
 
         var swiperOptions = {
+          slidesPerGroup: slidesPerGroup,
           centeredSlides: centeredSlides,
           pagination: this.$.swiperPagination,
           nextButton: this.$.swiperButtonNext,
