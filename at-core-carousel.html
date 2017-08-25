@@ -578,10 +578,20 @@
           onInit: function() {
             self.$.spinner.display = 'none';
             if (itemCount > 1) {
-              self.$.swiperButtonPrev.removeAttribute('hidden');
+              // self.$.swiperButtonPrev.removeAttribute('hidden');
               self.$.swiperButtonNext.removeAttribute('hidden');
             } else {
               Polymer.dom(self.$.swiperPagination).innerHTML = '';
+            }
+          },
+          onProgress: function (swiper, progress) {
+            if (progress === 0) {
+              self.$.swiperButtonPrev.setAttribute('hidden', true);
+            } else if (progress === 1) {
+              self.$.swiperButtonNext.setAttribute('hidden', true);
+            } else {
+              self.$.swiperButtonPrev.removeAttribute('hidden');
+              self.$.swiperButtonNext.removeAttribute('hidden');
             }
           }
         };
