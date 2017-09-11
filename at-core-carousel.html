@@ -591,8 +591,10 @@
           onProgress: function (swiper, progress) {
             if (progress === 0) {
               self.$.swiperButtonPrev.setAttribute('hidden', true);
+              self.$.swiperButtonNext.removeAttribute('hidden');
             } else if (progress === 1) {
               self.$.swiperButtonNext.setAttribute('hidden', true);
+              self.$.swiperButtonPrev.removeAttribute('hidden');
             } else {
               self.$.swiperButtonPrev.removeAttribute('hidden');
               self.$.swiperButtonNext.removeAttribute('hidden');
