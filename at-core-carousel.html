@@ -567,7 +567,9 @@
         var centeredSlides = this.centerMode === "1" || (this.centerMode === "2" && itemCount === 1);
         var ccWidth = this.getBoundingClientRect().width;
         var cardWidth = parseInt(this.cardWidth);
-        var slidesPerGroup = !isNaN(cardWidth) && this.cardWidth > 0 ? Math.floor(ccWidth / this.cardWidth) : 1;
+        cardWidth = isNaN(cardWidth) ? 0 : cardWidth;
+
+        var slidesPerGroup = cardWidth > 0 ? Math.floor(ccWidth / cardWidth) : 1;
 
         var swiperOptions = {
           slidesPerGroup: slidesPerGroup,
@@ -581,6 +583,12 @@
           paginationClickable: true,
           onInit: function() {
             self.$.spinner.display = 'none';
+        
+            if (self.maxItems > 0 && self.maxItems * cardWidth < ccWidth) {
+              Polymer.dom(self.$.swiperPagination).innerHTML = '';
+              return;
+            }
+
             if (itemCount > 1) {
               // self.$.swiperButtonPrev.removeAttribute('hidden');
               self.$.swiperButtonNext.removeAttribute('hidden');
@@ -589,6 +597,10 @@
             }
           },
           onProgress: function (swiper, progress) {
+            if (self.maxItems > 0 && self.maxItems * cardWidth < ccWidth) {
+              return;
+            }
+
             if (progress === 0) {
               self.$.swiperButtonPrev.setAttribute('hidden', true);
               self.$.swiperButtonNext.removeAttribute('hidden');
