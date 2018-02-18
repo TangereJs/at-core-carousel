@@ -312,6 +312,8 @@
       initialize: function() {
         if (!this.isAttached) return;
 
+        console.log("initialize");
+
         // clear previous error message
         this.$.msgEmptyList.html = "";
 
@@ -388,6 +390,7 @@
 
         // expand relative name with name prefix
         var elName = this.itemComponent;
+
         if (elName.indexOf(".card") > 0) {
      
           var elNameOrg = elName;
@@ -426,6 +429,7 @@
       },
 
       _bindItems: function (renderMode) {
+        console.log("_bindItems");
         // clear previously displayed elements
         this.clear();
 
@@ -558,8 +562,9 @@
         this._createSwipeInstance(renderMode, children.length);
       },
 
-      _createSwipeInstance: function(renderMode, itemCount) {
-        if (this._swipeInstance) {
+      _createSwipeInstance: function (renderMode, itemCount) {
+        console.log("_createSwipeInstance");
+        if (this._swipeInstance) {          
           this._swipeInstance.destroy();
         }
 
