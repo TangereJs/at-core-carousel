@@ -354,9 +354,9 @@
         var errorCarbonMsg = this.$.msgEmptyList;
 
         var items = this.items;
-        var itemComponent = this.itemComponent;
+        var cmpName = this.itemComponent;
 
-        if (!itemComponent) {
+        if (!cmpName) {
           errorCarbonMsg.html = this.T("Element name for data rendering not provided.");
           return;
         }
@@ -384,47 +384,41 @@
         var registrations = Polymer.telemetry.registrations;
         for (var i = 0; i < registrations.length && !found; i++) {
           var registration = registrations[i];
-          found = registration.is === itemComponent; 
+          found = registration.is === cmpName; 
         }
 
         if (found) {
           // display the available data
-          this._bindItems(renderMode);
+          this._bindItems(renderMode, cmpName);
           return;
         }
 
         // dynamically load item-component
 
         // expand relative name with name prefix
-        var elName = this.itemComponent;
+        if (cmpName.indexOf(".card") > 0) {
 
-        if (elName.indexOf(".card") > 0) {
-     
-          var elNameOrg = elName;
           var resolve = { namePrefix: "" };
 
           this.fire("resolve-name-prefix", resolve);
           var prefix = resolve.namePrefix;
 
-          if (elName == "default.card") elName = "";
-          elName = elName.replace("default.", "");
+          if (cmpName == "default.card") cmpName = "";
+          cmpName = cmpName.replace("default.", "");
 
-          elName = prefix + "/" + prefix + (elName ? ("-" + elName.replace(".", "-")) : "");
-
-          this.itemComponent = elName;
+          cmpName = prefix + "/" + prefix + (cmpName ? ("-" + cmpName.replace(".", "-")) : "");
         }
 
-        // load item-component from other component (itemComponent = component-name/item-component) or from localfolder (item-component)
+        // load item-component from other component (cmpName = component-name/item-component) or from localfolder (item-component)
         var compUrl = this.resolveUrl("../");
         if (window.ComponentsBase != undefined) compUrl = window.ComponentsBase;
 
-        var compName = this.itemComponent;
-        var importPath = compName.indexOf("/") >= 0 ? compUrl + compName + ".html" : compName + ".html";
+        var importPath = cmpName.indexOf("/") >= 0 ? compUrl + cmpName + ".html" : cmpName + ".html";
 
         this.importHref(
           importPath, 
           function success() {
-            this._bindItems(renderMode);
+            this._bindItems(renderMode, cmpName);
           },
           function error() {
             Polymer.signal("busy-end");
@@ -435,13 +429,12 @@
         );
       },
 
-      _bindItems: function (renderMode) {
+      _bindItems: function (renderMode, renderElementName) {
         console.log("_bindItems");
         // clear previously displayed elements
         this.clear();
 
         // get correct renderElementName
-        var renderElementName = this.itemComponent;
         if (renderElementName.indexOf("/") > 0) {
           renderElementName = renderElementName.substring(1 + renderElementName.lastIndexOf("/"));
         }
