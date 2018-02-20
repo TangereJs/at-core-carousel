@@ -207,6 +207,10 @@
         'initialize(items.*, itemComponent, cardWidth, emptyList)'
       ],
 
+      listeners: {
+        'list-ready': '_handleListReady'
+      },
+
       $meta: [{
         title: "Carousel",
         type: "at-core-carousel",
@@ -271,7 +275,10 @@
         }
 
         this.model = _model;
+      },
 
+      _handleListReady: function(event) {
+        this.refresh();
       },
 
       _getObjPath: function (obj, path) {
@@ -562,6 +569,22 @@
         this._createSwipeInstance(renderMode, children.length);
       },
 
+      _computeSlidesPerGroup: function() {
+        var rect = this.getBoundingClientRect();
+
+        if (!rect.height) return 1;
+
+        var cardWidth = this._computeCardWidth();
+        var result = cardWidth > 0 ? Math.floor(rect.width / cardWidth) : 1;
+        return result;
+      },
+
+      _computeCardWidth: function() {
+        var cardWidth = parseInt(this.cardWidth);
+        cardWidth = isNaN(cardWidth) ? 0 : cardWidth;
+        return cardWidth;
+      },
+
       _createSwipeInstance: function (renderMode, itemCount) {
         console.log("_createSwipeInstance");
         if (this._swipeInstance) {          
@@ -570,12 +593,8 @@
 
         var self = this;
         var centeredSlides = this.centerMode === "1" || (this.centerMode === "2" && itemCount === 1);
-        var ccWidth = this.getBoundingClientRect().width;
-        var ccHeight = this.getBoundingClientRect().height;
-        var cardWidth = parseInt(this.cardWidth);
-        cardWidth = isNaN(cardWidth) ? 0 : cardWidth;
 
-        var slidesPerGroup = cardWidth > 0 && ccHeight > 0 ? Math.floor(ccWidth / cardWidth) : 1;
+        var slidesPerGroup = this._computeSlidesPerGroup();
 
         var swiperOptions = {
           slidesPerGroup: slidesPerGroup,
@@ -589,7 +608,10 @@
           paginationClickable: true,
           onInit: function() {
             self.$.spinner.display = 'none';
-        
+            
+            var cardWidth = self._computeCardWidth();
+            var ccWidth = self.getBoundingClientRect().width;
+
             if (self.maxItems > 0 && self.maxItems * cardWidth < ccWidth) {
               Polymer.dom(self.$.swiperPagination).innerHTML = '';
               return;
@@ -603,6 +625,9 @@
             }
           },
           onProgress: function (swiper, progress) {
+            var cardWidth = self._computeCardWidth();
+            var ccWidth = self.getBoundingClientRect().width;
+
             if (self.maxItems > 0 && self.maxItems * cardWidth < ccWidth) {
               return;
             }
@@ -648,10 +673,18 @@
       },
 
       refresh: function() {
-        if (!this._swipeInstance) return;
-        this._swipeInstance.update();
-      }
+        if (!this._swipeInstance) { return; }
+        
+        // if height is 0 do not refresh because that will cause filckering when refresh is called again when height is not zero
+        var rect = this.getBoundingClientRect();
+        if (!rect.height) return;
 
+        // update slidesPerGroup because initial value when carousel is hidden is not correct
+        this._swipeInstance.params.slidesPerGroup = this._computeSlidesPerGroup();
+        
+        // update swipe UI
+        this._swipeInstance.update(true);
+      }
     });
   </script>
 </dom-module>
