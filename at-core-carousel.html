@@ -15,7 +15,7 @@
 
 <dom-module id="at-core-carousel">
   <template>
-    <style include="at-core-style-classes"></style> 
+    <style include="at-core-style-classes"></style>
     <style include="swiper-styles">
       :host {
         display: block;
@@ -83,7 +83,7 @@
     </style>
 
     <at-core-spinner id="spinner" type="wave"></at-core-spinner>
-    
+
     <at-carbon-message id="msgEmptyList" type="info"></at-carbon-message>
 
 
@@ -94,16 +94,16 @@
 
     <div id="insertContainer" class="swiper-container">
       <div id="insertPoint" class="swiper-wrapper"></div>
-      
+
       <div id="swiperPagination" class="swiper-pagination"></div>
     </div>
-    
+
     <div id="swiperButtonPrev" class="swiper-button-prev" hidden>
       <at-carbon-icon-color icon="now:caret-left" class="button-icon" color="blue"></at-carbon-icon-color>
     </div>
     <div id="swiperButtonNext" class="swiper-button-next" hidden>
       <at-carbon-icon-color icon="now:caret-right" class="button-icon" color="blue"></at-carbon-icon-color>
-    </div>      
+    </div>
 
     <div id="staticItems" hidden>
       <content id="contentInsertPoint" select="*"></content>
@@ -115,7 +115,7 @@
       is: 'at-core-carousel',
       behaviors: [ Tangere.behaviors.i18n ],
       properties: {
-        
+
         items: {
           type: Array,
           value: function() {
@@ -267,7 +267,7 @@
         var _model = this.modelRoot ? event.detail.model : event.detail.model.state;
         if (this.modelRoot) _model = this._getObjPath(_model, this.modelRoot);
 
-        if (_model) { 
+        if (_model) {
           if(_model.items) this.items = _model.items;
           if(_model.moreUrl) this.moreUrl = _model.moreUrl;
           if(_model.moreTitle) this.moreTitle = _model.moreTitle;
@@ -324,7 +324,7 @@
         // clear previous error message
         this.$.msgEmptyList.html = "";
 
-        // hide the buttons 
+        // hide the buttons
         this.$.swiperButtonPrev.setAttribute('hidden', true);
         this.$.swiperButtonNext.setAttribute('hidden', true);
 
@@ -347,7 +347,7 @@
         } else {
           // invalid mode specified
           this.$.msgEmptyList.html = this.T("Mode {0} is invalid.", mode);
-        }       
+        }
       },
 
       _initializeBoundDataSource: function(renderMode) {
@@ -384,7 +384,7 @@
         var registrations = Polymer.telemetry.registrations;
         for (var i = 0; i < registrations.length && !found; i++) {
           var registration = registrations[i];
-          found = registration.is === cmpName; 
+          found = registration.is === cmpName;
         }
 
         if (found) {
@@ -416,7 +416,7 @@
         var importPath = cmpName.indexOf("/") >= 0 ? compUrl + cmpName + ".html" : cmpName + ".html";
 
         this.importHref(
-          importPath, 
+          importPath,
           function success() {
             this._bindItems(renderMode, cmpName);
           },
@@ -468,9 +468,9 @@
 
 
           if (renderElement.properties.model != undefined) {
-            // designer cards use .model for binding  
+            // designer cards use .model for binding
             var dm = { items: [renderItemData], item: renderItemData }; // we unfortunately currently have two conventions for isolated cards items[] with one entry AND item
-            
+
             if (this.model) {
               dm._card = this.model._card;
               dm._container = this.model._container;
@@ -516,7 +516,7 @@
       _initializeStaticDataSource: function (renderMode) {
 
         var children = this.getEffectiveChildren();
-        
+
         if (!children.length) {
           this.$.spinner.display = 'none';
           this.$.msgEmptyList.html = this.T("Data for items not provided.");
@@ -538,9 +538,9 @@
           itemsToRender = Array.prototype.slice.call(children, 0, this.maxItems);
         }
 
-        Array.prototype.forEach.call(itemsToRender, function(child, index){ 
-          
-          child.parentElement.removeChild(child);          
+        Array.prototype.forEach.call(itemsToRender, function(child, index){
+
+          child.parentElement.removeChild(child);
 
           var swiperSlide = swiperSlidePrototype.cloneNode(true);
           swiperSlide.appendChild(child);
@@ -558,7 +558,7 @@
         }, this);
 
         Polymer.dom.flush();
-        
+
         this._createSwipeInstance(renderMode, children.length);
       },
 
@@ -580,7 +580,7 @@
 
       _createSwipeInstance: function (renderMode, itemCount) {
         console.log("_createSwipeInstance");
-        if (this._swipeInstance) {          
+        if (this._swipeInstance) {
           this._swipeInstance.destroy();
         }
 
@@ -601,7 +601,7 @@
           paginationClickable: true,
           onInit: function() {
             self.$.spinner.display = 'none';
-            
+
             var cardWidth = self._computeCardWidth();
             var ccWidth = self.getBoundingClientRect().width;
 
@@ -667,14 +667,14 @@
 
       refresh: function() {
         if (!this._swipeInstance) { return; }
-        
+
         // if height is 0 do not refresh because that will cause filckering when refresh is called again when height is not zero
         var rect = this.getBoundingClientRect();
         if (!rect.height) return;
 
         // update slidesPerGroup because initial value when carousel is hidden is not correct
         this._swipeInstance.params.slidesPerGroup = this._computeSlidesPerGroup();
-        
+
         // update swipe UI
         this._swipeInstance.update(true);
       }
