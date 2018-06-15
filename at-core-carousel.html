@@ -502,8 +502,10 @@
 
         Polymer.dom.flush();
 
-        // transform ShadyDom styles of innerHTML
-        if (!Polymer.Settings.useShadow) {
+        // In FF the only reliable way to detect shadowDOM is to use polymer version detection
+        var polymerVersion = parseInt(Polymer.version);
+        if (polymerVersion == 1) {
+          // transform ShadyDom styles of innerHTML
           Polymer.StyleTransformer.dom(this.$.insertContainer, this.is, true);
         }
 
