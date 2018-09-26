@@ -1,0 +1,76 @@
+<link rel="import" href="../../tangere/tangere.html">
+<link rel="import" href="../../at-core-style-classes/at-core-style-classes.html" />
+<link rel="import" href="../at-core-carousel.html">
+<link rel="import" href="declarative-item.html" />
+
+<dom-module id="demo-pagination-display-mode">
+  <template>
+    <style include="at-core-style-classes">
+       :host {
+        display: block;
+        box-sizing: border-box;
+      }
+
+      .row {
+        margin: 12px;
+        padding: 12px;
+      }
+
+      .fixed-width-container {
+        /* width: 500px; */
+        background-color: bisque;
+        margin: 0 24px;
+      }
+
+      .fluid-width-container {
+        background-color: bisque;
+        margin: 0 24px;
+      }
+      
+      .decl-item {
+        background-color: lightblue;
+      }
+    </style>
+
+    <div class="row">
+      <div class="font-headline">Declarative examples</div>
+      <div class="font-subhead">Items and data are rendered as specified declaratively.</div>
+    </div>
+
+    <div class="row">
+      <h3 class="font-title">Demo 1</h3>
+      <ul class="font-body1">
+        <li>Carousel is inside fixed width container (500px).</li>
+        <li>Carousel has card-width="". This sets renderMode to swipe and each swipe item has 100% width of carousel</li>
+        <li>navigation-as-overlay attribute is false. Navigation arrows and pagination will not overlay carousel items</li>
+      </ul>
+
+      <h3 class="font-title">Preview</h3>
+      <div class="fixed-width-container">
+        <at-core-carousel 
+          mode="static" 
+          card-width="" 
+          pagination-display-mode="automatic" 
+          more-title="lorem title" 
+          more-url="http://www.google.com" 
+          navigation-as-overlay
+        >
+          <declarative-item title="Item 1" class="decl-item"></declarative-item>
+          <declarative-item title="Item 2" class="decl-item"></declarative-item>
+          <declarative-item title="Item 3" class="decl-item"></declarative-item>
+          <declarative-item title="Item 4" class="decl-item"></declarative-item>
+          <declarative-item title="Item 5" class="decl-item"></declarative-item>
+          <declarative-item title="Item 6" class="decl-item"></declarative-item>
+        </at-core-carousel>
+      </div>
+    </div>
+
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'demo-pagination-display-mode'
+  });
+
+</script>
