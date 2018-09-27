@@ -697,8 +697,6 @@
           nextButton: this.$.swiperButtonNext,
           prevButton: this.$.swiperButtonPrev,
           paginationBulletRender: function(s, i, bulletClass) {
-            if (self.paginationDisplayMode == "compact") return '';
-
             return '<span class="style-scope at-core-carousel '+ bulletClass +'"></span>';
           },
           paginationClickable: true,
