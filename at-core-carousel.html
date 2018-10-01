@@ -61,6 +61,11 @@
         @apply --layout-horizontal;
         margin: 0 50px 8px 0;
       }
+
+      .link-container.compact {
+        @apply --layout-vertical;
+        margin: 0 50px 8px 50px;
+      }
       
       .compact-pagination-space {
         padding: 24px 0 0 0;
@@ -102,7 +107,7 @@
       <at-carbon-message id="msgEmptyList" type="info"></at-carbon-message>
   
   
-      <div class="link-container">
+      <div id="linkContainer" class="link-container">
         <div id="infoTextContainer" class="info-text-container"></div>
         <at-link id="moreLink" class="block font-body1 action more-link" href="[[moreUrl]]" hidden$="[[_computeLinkHidden(items, maxItems)]]"></at-link>
       </div>
@@ -317,6 +322,8 @@
 
         this.toggleClass('compact', isCompact, this.$.swiperButtonPrev);
         this.toggleClass('compact', isCompact, this.$.swiperButtonNext);
+
+        this.toggleClass('compact', isCompact, this.$.linkContainer);
 
         this.navigationAsOverlay = isCompact;
         
