@@ -227,6 +227,7 @@
         paginationDisplayMode: {
           type: String,
           value: "automatic",
+          xtype: 'enum',
           xvaluelist: [
             { title: "Automatic", value: "automatic" },
             { title: "Wide", value: "wide" },
@@ -251,8 +252,6 @@
         events: [],
         icon: "now:view-carousel"
       }],
-
-      _PAGINATION_DISPLAY_MODE_AVAILABLE_WIDTH_TRESHOLD: 500,    
 
       _handleResizeSensed: function(event) {
         if (this.paginationDisplayMode != "automatic") return;
@@ -308,7 +307,13 @@
 
       _computePaginationDisplayMode: function(width) {
         width = width == undefined ? this.$.resizeSensor.queryWidth() : width;
-        var mode = width > this._PAGINATION_DISPLAY_MODE_AVAILABLE_WIDTH_TRESHOLD ? "wide" : "compact";
+
+        var threshold = 1.5 * this.cardWidth;
+        if (threshold == 0 || isNaN(threshold)) {
+          threshold = 500;
+        }
+
+        var mode = width > threshold ? "wide" : "compact";
         return mode;
       },
 
