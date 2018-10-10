@@ -314,6 +314,8 @@
         }
 
         var mode = width > threshold ? "wide" : "compact";
+        if(mode == "compact") this.cardWidth = width;
+
         return mode;
       },
 
