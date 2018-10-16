@@ -768,6 +768,22 @@
         this._handlePaginationDisplayMode(mode);
       },
 
+      // 
+      // we need the resetResizeSensor function for situations where at-core-carousel or its parents are initially hidden when resizeSensor initializes
+      // when at-core-carousel (or its parents) are displayed we need to reset resize sensor so that it picks up new carousel dimensions
+      // after new dimensions are picked up resize sensor correctly detects carousel dimension changes
+      // 
+      resetResizeSensor: function() {
+        this.$.resizeSensor.reset();
+
+        var mode = this._computePaginationDisplayMode();
+        this._handlePaginationDisplayMode(mode);
+
+        // dispatch window resize event so that elements that use this event and are rendered as slides can update
+        // one example of such element is at-carbon-clamp
+        window.dispatchEvent(new Event('resize'));
+      },
+
       _getRenderMode: function () {
         // we have cardWidth in attributes and property
         var cardWidthAttrValue = this.getAttribute('card-width');
