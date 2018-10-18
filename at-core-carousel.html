@@ -360,6 +360,28 @@
           }
         });
 
+        // 
+        // It was discovered during testing of search-now under mobile emulation and Launcher.liquid responsive launcher and cisco-directory-card
+        // that on second search first card was moved to the right. I found out that the cause for the move were margins of 50px
+        // these margins were coming from swiper-container-no-overlay class
+        
+        // On first search and first render at-core-resize-sensor was triggered and this was calling _handlePaginationDisplayMode first, which set this.navigationAsOverlay = isCompact.
+        // _bindItems function was called next and there this.navigationAsOverlay was read and it has value of true
+        
+        // On second search and render _bindItems function was called first with value of false for this.navigationAsOverlay
+        // resize sensor is not triggered at all, _handlePaginationDisplayMode is not called at all
+        // but on second search this.navigationAsOverlay has value of false
+        
+        // Why is this.navigationAsOverlay value reset from true to false ?
+        // Current answer is : because of magic.
+        // I only found out that when attached: function is called to render the results of the second search navigationAsOverlay is false. 
+        // I went up the stack trace and didn't find any place where this property could be set to false
+        // 
+        // -- ij, 2018-10-18
+        var toggleCondition = renderMode === "carousel" && !isCompact;
+        this.toggleClass('swiper-container-no-overlay', toggleCondition, this.$.insertContainer);
+        this.toggleClass('swiper-container-no-overlay', toggleCondition, this.$.swiperPagination);
+
         Polymer.dom.flush();
       },
 
