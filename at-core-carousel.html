@@ -380,7 +380,7 @@
         // -- ij, 2018-10-18
         var toggleCondition = renderMode === "carousel" && !isCompact;
         this.toggleClass('swiper-container-no-overlay', toggleCondition, this.$.insertContainer);
-        this.toggleClass('swiper-container-no-overlay', toggleCondition, this.$.swiperPagination);
+        this.toggleClass('swiper-pagination-no-overlay', toggleCondition, this.$.swiperPagination);
 
         Polymer.dom.flush();
       },
