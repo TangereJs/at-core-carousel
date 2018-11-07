@@ -725,7 +725,7 @@
       _createSwipeInstance: function (renderMode, itemCount) {
         console.log("_createSwipeInstance");
         if (this._swipeInstance) {
-          this._swipeInstance.destroy();
+          this._swipeInstance.destroy(true);
         }
 
         var self = this;
