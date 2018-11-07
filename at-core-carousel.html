@@ -313,8 +313,14 @@
           threshold = 500;
         }
 
+        if (!this._originalCardWidth) {
+          this._originalCardWidth = this.cardWidth;
+        }
+
         var mode = width > threshold ? "wide" : "compact";
         if(mode == "compact") this.cardWidth = width;
+        
+        this.cardWidth = Math.min(this.cardWidth, this._originalCardWidth);
 
         return mode;
       },
@@ -422,6 +428,7 @@
 
       attached: function() {
         this.isAttached = true;
+        this.$.resizeSensor.reset();
         this.initialize();
       },
 
