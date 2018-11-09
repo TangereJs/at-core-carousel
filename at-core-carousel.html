@@ -8,6 +8,7 @@
 <link rel="import" href="../at-core-style-classes/at-core-style-classes.html" />
 <link rel="import" href="../at-core-signals/at-core-signals.html" />
 <link rel="import" href="../at-core-resize-sensor/at-core-resize-sensor.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 
 <link rel="import" href="lib/swiper-styles.html" />
 <link rel="import" href="swipe-import.html">
@@ -22,6 +23,10 @@
         box-sizing: border-box;
         position: relative;
         min-height: 50px;
+      }
+
+      :host([hidden]) {
+        display: none !important;
       }
 
       .swiper-slide {
@@ -136,7 +141,7 @@
   <script>
     Polymer({
       is: 'at-core-carousel',
-      behaviors: [ Tangere.behaviors.i18n ],
+      behaviors: [ Tangere.behaviors.i18n, Polymer.IronResizableBehavior ],
       properties: {
 
         items: {
@@ -234,6 +239,12 @@
             { title: "Compact", value: "compact" }
           ],
           observer: '_paginationDisplayModeChanged'
+        },
+
+        hide: {
+          type: Boolean,
+          value: false,
+          observer: '_hideChanged'
         }
 
       },
@@ -243,7 +254,8 @@
       ],
 
       listeners: {
-        'list-ready': '_handleListReady'
+        'list-ready': '_handleListReady',
+        'iron-resize': '_handleIronResize'
       },
 
       $meta: [{
@@ -252,6 +264,18 @@
         events: [],
         icon: "now:view-carousel"
       }],
+
+      _hideChanged: function(newValue, oldValue) {
+        this.toggleAttribute('hidden', newValue, this);
+      },
+
+      _handleIronResize: function(event) {
+        this.$.resizeSensor.reset();
+        
+        if (this.offsetWidth > 0 && this.offsetHeight > 0) {
+          this.initialize();
+        }
+      },
 
       _handleResizeSensed: function(event) {
         if (this.paginationDisplayMode != "automatic") return;
@@ -320,6 +344,28 @@
         var mode = width > threshold ? "wide" : "compact";
         if(mode == "compact") this.cardWidth = width;
         
+        // 
+        // There is a use case where at-core-carousel is a content element in cards
+        // Let actions be as follows: 
+        // 1. Initially, carousel is displayed on the screen
+        // 2. uses clicks the minimize button at-carbon-card-title and card content and footer are minimized (hidden, really)
+        // 3. user refreshes the page; page loads and card is rendered in minimized state
+        // 4. user clicks the restore/miximize button
+        // 5. at-core-carousel becomes visible
+        // 
+        // After 3. _originalCardWidth is what was set as card-width initially
+        // since carousel is hidden resizeSensor.queryWidth() will report width of 100px 
+        // and this.cardWidth will become 100px;
+        // 
+        // After 5. when carousel is visible, resizeSensor.queryWidth() will report the actual available width for at-core-carousel
+        // if width is greater than last cardWidth (100px) use whatever the originalCardWidth was 
+        // 
+        // -- ij, on 2018-11-08
+        // 
+        if (width > this.cardWidth) {
+          this.cardWidth = this._originalCardWidth;
+        }
+
         this.cardWidth = Math.min(this.cardWidth, this._originalCardWidth);
 
         return mode;
