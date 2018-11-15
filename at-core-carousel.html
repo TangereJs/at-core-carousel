@@ -271,9 +271,12 @@
 
       _handleIronResize: function(event) {
         this.$.resizeSensor.reset();
+        var self = this;
         
         if (this.offsetWidth > 0 && this.offsetHeight > 0) {
-          this.initialize();
+          this.debounce('debounce-init', function() {
+            self.initialize();
+          }, 100);
         }
       },
 
@@ -332,17 +335,17 @@
       _computePaginationDisplayMode: function(width) {
         width = width == undefined ? this.$.resizeSensor.queryWidth() : width;
 
-        var threshold = 1.5 * this.cardWidth;
+        var threshold = 1.5 * this._computeCardWidth();
         if (threshold == 0 || isNaN(threshold)) {
           threshold = 500;
         }
 
         if (!this._originalCardWidth) {
-          this._originalCardWidth = this.cardWidth;
+          this._originalCardWidth = this._computeCardWidth();
         }
 
         var mode = width > threshold ? "wide" : "compact";
-        if(mode == "compact") this.cardWidth = width;
+        if(mode == "compact") this._internalCardWidth = width;
         
         // 
         // There is a use case where at-core-carousel is a content element in cards
@@ -362,11 +365,13 @@
         // 
         // -- ij, on 2018-11-08
         // 
-        if (width > this.cardWidth) {
-          this.cardWidth = this._originalCardWidth;
+        var computedWidth = this._computeCardWidth();
+        if (width > computedWidth) {
+          this._internalCardWidth = this._originalCardWidth;
         }
 
-        this.cardWidth = Math.min(this.cardWidth, this._originalCardWidth);
+        computedWidth = this._computeCardWidth();
+        this._internalCardWidth = Math.min(computedWidth, this._originalCardWidth);
 
         return mode;
       },
@@ -510,8 +515,9 @@
           this._swipeInstance = undefined;
         }
 
+        this._computePaginationDisplayMode();
         var renderMode = this._getRenderMode();
-
+        
         // check mode and initialize correct data source
         var mode = this.mode;
         if (mode === "bound") {
@@ -618,8 +624,10 @@
         // create swipe item prototype for cloning
         var swipeItemPrototype = document.createElement("div");
         Polymer.dom(swipeItemPrototype).classList.add("swiper-slide");
+        var computedWidth = this._computeCardWidth();
+
         if (renderMode === "carousel") {
-          swipeItemPrototype.style.width = this.cardWidth + 'px';
+          swipeItemPrototype.style.width = computedWidth + 'px';
         }
 
         // create render element prototype for cloning
@@ -635,13 +643,13 @@
           itemsToRender = this.items.slice(0, this.maxItems);
         }
 
+        var documentFragment = document.createDocumentFragment();
+
         itemsToRender.forEach(function(renderItemData){
 
           var swipeItem = swipeItemPrototype.cloneNode(true);
 
           var renderElement = document.createElement(renderElementName);
-
-
 
           if (renderElement.properties.model != undefined) {
             // designer cards use .model for binding
@@ -674,8 +682,10 @@
           }
 
           Polymer.dom(swipeItem).appendChild(renderElement);
-          Polymer.dom(insertPoint).appendChild(swipeItem);
+          Polymer.dom(documentFragment).appendChild(swipeItem);
         }, this);
+
+        Polymer.dom(insertPoint).appendChild(documentFragment);
 
         Polymer.dom.flush();
 
@@ -719,8 +729,9 @@
 
         var swiperSlidePrototype = document.createElement('div');
         swiperSlidePrototype.classList.add('swiper-slide');
+        var computedWidth = this._computeCardWidth();
         if (renderMode === "carousel") {
-          swiperSlidePrototype.style.width = this.cardWidth + 'px';
+          swiperSlidePrototype.style.width = computedWidth + 'px';
         }
 
         // iterate through data, clone swipe/render elements and append to insert point
@@ -763,6 +774,10 @@
       },
 
       _computeCardWidth: function() {
+        if (this._internalCardWidth != undefined) {
+          return this._internalCardWidth;
+        }
+
         var cardWidth = parseInt(this.cardWidth);
         cardWidth = isNaN(cardWidth) ? 0 : cardWidth;
         return cardWidth;
